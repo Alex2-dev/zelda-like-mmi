@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dce78b6de0d4cc45b9f8b8f062dbf9f, type: 3}
+  m_Name: TrapData_Mine
+  m_EditorClassIdentifier: 
+  m_trapName: "Pi\xE8ge"
+  m_damage: 80
+  m_triggerRadius: 1.5
+  m_armDelay: 0.5
+  m_destroyOnUse: 1
+  m_rearmDelay: 3
+  m_trapPrefab: {fileID: 0}
