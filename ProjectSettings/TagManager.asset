@@ -12,6 +12,7 @@ TagManager:
   - Hide_Closet
   - Hide_Water
   - Hide_Bush
+  - CorruptedEnemy
   layers:
   - Default
   - TransparentFX

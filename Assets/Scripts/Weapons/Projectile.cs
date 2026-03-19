@@ -44,7 +44,7 @@ public class Projectile : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.CompareTag("Enemy")) return;
+        if (!other.CompareTag("Enemy") && !other.CompareTag("CorruptedEnemy")) return;
 
         EnemyHealth health = other.GetComponent<EnemyHealth>();
         if (health != null)

@@ -13,8 +13,10 @@ using UnityEngine;
 // one is enabled ; and the map indication is updated accordingly
 public class Teleport : MonoBehaviour {
     public GameObject m_teleportTo = null;
-    
+
     private GameObject m_player = null;
+    private static float s_lastTeleportTime = -1f;
+    private const float k_cooldown = 0.5f;
 
     private void Awake()
     {
@@ -23,12 +25,10 @@ public class Teleport : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-     
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player" && Time.time - s_lastTeleportTime > k_cooldown)
         {
             TeleportPlayer();
         }
-
     }
 
     private void TeleportPlayer()
@@ -37,6 +37,7 @@ public class Teleport : MonoBehaviour {
         {
             if (this.transform.parent != null)
             {
+                s_lastTeleportTime = Time.time;
                 this.transform.parent.gameObject.SetActive(false);
                 m_teleportTo.transform.parent.gameObject.SetActive(true);
 
