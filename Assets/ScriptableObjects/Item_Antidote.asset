@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Item_Antidote
   m_EditorClassIdentifier: 
   m_itemName: Antidote
-  m_icon: {fileID: 21300000, guid: 1640c87f92573c44582846fb20fa2ccf, type: 3}
+  m_icon: {fileID: 21300000, guid: 972c98815423928429ab7a49c68bbd54, type: 3}
   m_maxStack: 3
   m_effect: {fileID: 11400000, guid: c6b1996107799ca42ab8475bf6bae548, type: 2}

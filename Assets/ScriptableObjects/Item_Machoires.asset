@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Item_Machoires
   m_EditorClassIdentifier: 
   m_itemName: "Pi\xE8ge \xE0 m\xE2choires\t"
-  m_icon: {fileID: 21300000, guid: 1640c87f92573c44582846fb20fa2ccf, type: 3}
+  m_icon: {fileID: -704876454, guid: a4b4468e4a44d2a43a110a6eba18c3d3, type: 3}
   m_maxStack: 3
   m_effect: {fileID: 11400000, guid: cb4a56e81d4a3194089e6c620e0f9fdc, type: 2}

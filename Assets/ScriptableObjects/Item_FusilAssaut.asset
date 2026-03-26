@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Item_FusilAssaut
   m_EditorClassIdentifier: 
   m_itemName: Fusil d'assaut
-  m_icon: {fileID: 21300000, guid: 1640c87f92573c44582846fb20fa2ccf, type: 3}
+  m_icon: {fileID: 21300000, guid: 320534e1123ea164180570a907ab0eeb, type: 3}
   m_maxStack: 1
   m_effect: {fileID: 11400000, guid: 25bb6ec0a37b68742aaf67c60386de26, type: 2}

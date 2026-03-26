@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Item_MunitionsSniper
   m_EditorClassIdentifier: 
   m_itemName: "Munitions Sniper\t"
-  m_icon: {fileID: 21300000, guid: 1640c87f92573c44582846fb20fa2ccf, type: 3}
+  m_icon: {fileID: 21300000, guid: 5ac40d6fbd1cbee4cabf340e2dd38588, type: 3}
   m_maxStack: 3
   m_effect: {fileID: 11400000, guid: 96a55de1a50cf8042ae396e12ee136d1, type: 2}

@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Item_Mitraillette
   m_EditorClassIdentifier: 
   m_itemName: Mitraillette
-  m_icon: {fileID: 21300000, guid: 1640c87f92573c44582846fb20fa2ccf, type: 3}
+  m_icon: {fileID: 21300000, guid: 5c45df8e9a66f1f47b6e489ca9af8a45, type: 3}
   m_maxStack: 1
   m_effect: {fileID: 11400000, guid: bb1628fd4f9b1624aacbd277108210ea, type: 2}

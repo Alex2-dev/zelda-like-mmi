@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Item_MunitionsSMG
   m_EditorClassIdentifier: 
   m_itemName: "Munitions SMG\t"
-  m_icon: {fileID: 21300000, guid: 1640c87f92573c44582846fb20fa2ccf, type: 3}
+  m_icon: {fileID: 21300000, guid: 020b8739c56b75a44833998a52b263ff, type: 3}
   m_maxStack: 3
   m_effect: {fileID: 11400000, guid: ef9be3b56bac65347a2bb38e4378086c, type: 2}

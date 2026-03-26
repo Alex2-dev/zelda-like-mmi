@@ -7,15 +7,14 @@ using UnityEngine.UI;
 /// Met à jour les barres de vie, d'intégrité et de faim (Sliders Unity).
 ///
 /// SETUP :
-/// - Glisser les Sliders HealthBar, IntegrityBar et HungerBar dans les champs ci-dessous
+/// - Glisser les Sliders HealthBar et IntegrityBar dans les champs ci-dessous
 /// - Glisser le Player dans m_playerStats
 /// </summary>
 public class PlayerStatsUI : MonoBehaviour
 {
-    [Header("Barres de vie, d'intégrité et de faim")]
+    [Header("Barres de vie et d'intégrité")]
     public Slider m_healthBar;
     public Slider m_integrityBar;
-    public Slider m_hungerBar;
 
     [Header("Référence joueur")]
     public PlayerStats m_playerStats;
@@ -29,8 +28,5 @@ public class PlayerStatsUI : MonoBehaviour
 
         if (m_integrityBar != null)
             m_integrityBar.value = m_playerStats.GetIntegrityNormalized();
-
-        if (m_hungerBar != null)
-            m_hungerBar.value = m_playerStats.GetHungerNormalized();
     }
 }

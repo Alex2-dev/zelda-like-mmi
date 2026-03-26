@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Item_Sniper
   m_EditorClassIdentifier: 
   m_itemName: Sniper
-  m_icon: {fileID: 21300000, guid: 1640c87f92573c44582846fb20fa2ccf, type: 3}
+  m_icon: {fileID: 21300000, guid: 4a013a51003135847960f9ae2cc1dea7, type: 3}
   m_maxStack: 1
   m_effect: {fileID: 11400000, guid: cf9d92e75f503ee4ca6091022f1b09fe, type: 2}
