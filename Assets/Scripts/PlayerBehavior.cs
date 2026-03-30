@@ -52,11 +52,15 @@ public class PlayerBehavior : MonoBehaviour
 
     Rigidbody2D m_rb2D;
     SpriteRenderer m_renderer;
+    Animator m_animator;
+
+    private bool m_isMoving = false;
 
     void Awake()
     {
         m_rb2D = gameObject.GetComponent<Rigidbody2D>();
         m_renderer = gameObject.GetComponent<SpriteRenderer>();
+        m_animator = gameObject.GetComponent<Animator>();
 
         m_closestNPCDialog = null;
     }
@@ -126,6 +130,8 @@ public class PlayerBehavior : MonoBehaviour
                 m_direction = CardinalDirections.CARDINAL_S;
             }
         }
+
+        m_isMoving = (Mathf.Abs(horizontalOffset) > 0.01f || Mathf.Abs(verticalOffset) > 0.01f);
 
         if (m_weaponManager != null)
             m_weaponManager.SetDirection(GetShootDirectionVector());
@@ -228,25 +234,28 @@ public class PlayerBehavior : MonoBehaviour
         }
     }
 
-    // Changes the player sprite regarding it position
-    // (back when going North, front when going south, right when going east, left when going west)
+    // Changes the player animation regarding its direction
+    // Uses Animator if available (parameters: "Direction" int + "IsMoving" bool),
+    // otherwise falls back to direct sprite swap.
     private void ChangeSpriteToMatchDirection()
     {
-        if (m_direction == CardinalDirections.CARDINAL_N)
+        if (m_animator != null)
         {
-            m_renderer.sprite = m_backSprite;
+            // Direction: 0=S, 1=N, 2=W, 3=E  (matches CardinalDirections enum order)
+            m_animator.SetInteger("Direction", (int)m_direction);
+            m_animator.SetBool("IsMoving", m_isMoving);
         }
-        else if (m_direction == CardinalDirections.CARDINAL_S)
+        else
         {
-            m_renderer.sprite = m_frontSprite;
-        }
-        else if (m_direction == CardinalDirections.CARDINAL_E)
-        {
-            m_renderer.sprite = m_rightSprite;
-        }
-        else if (m_direction == CardinalDirections.CARDINAL_W)
-        {
-            m_renderer.sprite = m_leftSprite;
+            // Fallback: swap sprite directly (no animation)
+            if (m_direction == CardinalDirections.CARDINAL_N)
+                m_renderer.sprite = m_backSprite;
+            else if (m_direction == CardinalDirections.CARDINAL_S)
+                m_renderer.sprite = m_frontSprite;
+            else if (m_direction == CardinalDirections.CARDINAL_E)
+                m_renderer.sprite = m_rightSprite;
+            else if (m_direction == CardinalDirections.CARDINAL_W)
+                m_renderer.sprite = m_leftSprite;
         }
     }
 

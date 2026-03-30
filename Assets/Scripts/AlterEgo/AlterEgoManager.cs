@@ -45,17 +45,19 @@ public class AlterEgoManager : MonoBehaviour
 
     // Références
     private SpriteRenderer m_spriteRenderer;
+    private Animator       m_animator;
     private PlayerStats    m_playerStats;
     private PlayerBehavior m_playerBehavior;
     private Rigidbody2D    m_rb2D;
     private Collider2D[]   m_colliders;
 
-    // Sprite original (avant transformation)
+    // Sprite original (utilisé uniquement si pas d'Animator)
     private Sprite m_normalSprite;
 
     void Awake()
     {
         m_spriteRenderer = GetComponent<SpriteRenderer>();
+        m_animator       = GetComponent<Animator>();
         m_playerStats    = GetComponent<PlayerStats>();
         m_playerBehavior = GetComponent<PlayerBehavior>();
         m_rb2D           = GetComponent<Rigidbody2D>();
@@ -102,14 +104,20 @@ public class AlterEgoManager : MonoBehaviour
     {
         IsAlterEgo = true;
         m_remainingAlterEgoTime = m_maxAlterEgoTime;
-        m_spriteRenderer.sprite = m_alterEgoSprite;
+        if (m_animator != null)
+            m_animator.SetBool("IsAlterEgo", true);
+        else
+            m_spriteRenderer.sprite = m_alterEgoSprite;
         HiddenEnemyMarker.SetAlterEgoMode(true);
     }
 
     private void ExitAlterEgo(bool forced)
     {
         IsAlterEgo = false;
-        m_spriteRenderer.sprite = m_normalSprite;
+        if (m_animator != null)
+            m_animator.SetBool("IsAlterEgo", false);
+        else
+            m_spriteRenderer.sprite = m_normalSprite;
         m_currentCooldown = m_cooldown;
         HiddenEnemyMarker.SetAlterEgoMode(false);
 
