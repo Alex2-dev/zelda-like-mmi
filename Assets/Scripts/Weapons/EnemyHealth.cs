@@ -23,13 +23,7 @@ public class EnemyHealth : MonoBehaviour
     {
         m_currentHealth = Mathf.Max(m_currentHealth - amount, 0f);
         if (m_currentHealth <= 0f)
-        {
-            if (GetComponent<CorruptedEnemyMarker>() != null)
-            {
-                // Drop loot amélioré
-            }
             Destroy(gameObject);
-        }
     }
 
     public float GetHealthNormalized() => m_currentHealth / m_maxHealth;

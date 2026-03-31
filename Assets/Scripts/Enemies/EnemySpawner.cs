@@ -21,9 +21,6 @@ public class EnemySpawner : MonoBehaviour
     [Header("Nombre d'ennemis à spawner")]
     public int m_enemyCount = 3;
 
-    [Header("Ennemi corrompu (chance 0-1)")]
-    [Range(0f, 1f)] public float m_corruptChance = 0.15f;
-
     private List<GameObject> m_spawnedEnemies = new List<GameObject>();
 
     void OnEnable()
@@ -53,7 +50,6 @@ public class EnemySpawner : MonoBehaviour
             Vector3 spawnPos  = validPositions[Random.Range(0, validPositions.Count)];
 
             GameObject enemy = Instantiate(prefab, spawnPos, Quaternion.identity);
-            CorruptedEnemyModifier.TryApply(enemy, m_corruptChance);
             m_spawnedEnemies.Add(enemy);
         }
     }
