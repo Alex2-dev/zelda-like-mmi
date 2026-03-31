@@ -93,11 +93,8 @@ public class PlayerBehavior : MonoBehaviour
         float horizontalOffset = Input.GetAxis("Horizontal");
         float verticalOffset = Input.GetAxis("Vertical");
 
-        // Course avec Shift uniquement quand l'intégrité est au maximum
         float currentSpeed = m_speed;
-        if (m_playerStats != null
-            && m_playerStats.IsAtFullIntegrity()
-            && Input.GetKey(KeyCode.LeftShift))
+        if (m_playerStats != null && Input.GetKey(KeyCode.LeftShift))
         {
             currentSpeed *= m_playerStats.m_runMultiplier;
         }
@@ -192,8 +189,7 @@ public class PlayerBehavior : MonoBehaviour
             return;
         }
 
-        if (m_alterEgoManager == null || !m_alterEgoManager.IsAlterEgo)
-            ChangeSpriteToMatchDirection();
+        ChangeSpriteToMatchDirection();
 
         // If the player presses SPACE, then two solution
         // - If there is a dialog ready to be displayed (i.e. the player is closed to a NPC)

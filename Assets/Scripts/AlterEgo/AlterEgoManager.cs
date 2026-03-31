@@ -15,6 +15,13 @@ public class AlterEgoManager : MonoBehaviour
     [Tooltip("Sprite affiché en forme alter ego")]
     public Sprite m_alterEgoSprite;
 
+    [Header("Animation")]
+    [Tooltip("Controller normal du joueur (Main_Character.controller)")]
+    public RuntimeAnimatorController m_normalController;
+
+    [Tooltip("Override controller alter ego (AlterEgo.overrideController)")]
+    public RuntimeAnimatorController m_alterEgoController;
+
     [Tooltip("Durée maximale en alter ego (secondes)")]
     public float m_maxAlterEgoTime = 15f;
 
@@ -105,7 +112,7 @@ public class AlterEgoManager : MonoBehaviour
         IsAlterEgo = true;
         m_remainingAlterEgoTime = m_maxAlterEgoTime;
         if (m_animator != null)
-            m_animator.SetBool("IsAlterEgo", true);
+            m_animator.runtimeAnimatorController = m_alterEgoController;
         else
             m_spriteRenderer.sprite = m_alterEgoSprite;
         HiddenEnemyMarker.SetAlterEgoMode(true);
@@ -115,7 +122,7 @@ public class AlterEgoManager : MonoBehaviour
     {
         IsAlterEgo = false;
         if (m_animator != null)
-            m_animator.SetBool("IsAlterEgo", false);
+            m_animator.runtimeAnimatorController = m_normalController;
         else
             m_spriteRenderer.sprite = m_normalSprite;
         m_currentCooldown = m_cooldown;
