@@ -6,6 +6,7 @@ using UnityEngine;
 /// - Ajouter sur le prefab ennemi avec SpriteRenderer, Rigidbody2D, Collider2D, EnemyHealth.
 /// - Cocher "Is Trigger" sur le Collider2D pour la détection de contact.
 /// - Ajouter un second Collider2D (non-trigger) pour la physique.
+/// - Optionnel : ajouter un Animator avec paramètre Direction (int: 0=S,1=N,2=W,3=E).
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(EnemyHealth))]
@@ -23,12 +24,14 @@ public class EnemyBehavior : MonoBehaviour
     private Rigidbody2D m_rb;
     private Transform m_player;
     private float m_lastDamageTime = -999f;
+    private Animator m_animator;
 
     void Awake()
     {
         m_rb = GetComponent<Rigidbody2D>();
         m_rb.gravityScale = 0f;
         m_rb.freezeRotation = true;
+        m_animator = GetComponent<Animator>();
 
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
@@ -41,6 +44,16 @@ public class EnemyBehavior : MonoBehaviour
 
         Vector2 dir = ((Vector2)m_player.position - (Vector2)transform.position).normalized;
         m_rb.velocity = dir * m_speed;
+
+        if (m_animator != null)
+        {
+            int direction;
+            if (Mathf.Abs(dir.x) >= Mathf.Abs(dir.y))
+                direction = dir.x > 0 ? 3 : 2; // E or W
+            else
+                direction = dir.y > 0 ? 1 : 0; // N or S
+            m_animator.SetInteger("Direction", direction);
+        }
 
         // Séparation : pousse directement la position si trop proche d'un autre ennemi
         EnemyBehavior[] all = FindObjectsOfType<EnemyBehavior>();
