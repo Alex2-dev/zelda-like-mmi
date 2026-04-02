@@ -32,7 +32,8 @@ public class WeaponManager : MonoBehaviour
             m_shootCooldown -= Time.deltaTime;
 
         // Les armes automatiques gèrent leur propre tir ici
-        if (m_canFire && m_equippedWeapon != null && m_equippedWeapon.m_isAutomatic && Input.GetKey(KeyCode.Space))
+        bool fireHeld = InputManager.Instance != null ? InputManager.Instance.AttackHeld : Input.GetKey(KeyCode.Space);
+        if (m_canFire && m_equippedWeapon != null && m_equippedWeapon.m_isAutomatic && fireHeld)
             TryShoot(m_currentDirection);
     }
 
