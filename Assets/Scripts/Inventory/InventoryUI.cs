@@ -54,11 +54,36 @@ public class InventoryUI : MonoBehaviour
     [Tooltip("Les 8 boutons des slots de l'inventaire complet (dans l'ordre 0 à 7)")]
     public Button[] m_slotButtons = new Button[8];
 
+    [Tooltip("Les 8 Images de fond des slots (pour le highlight de sélection)")]
+    public Image[] m_slotFrames = new Image[8];
+
+    [Tooltip("Couleur du slot sélectionné dans l'inventaire")]
+    public Color m_slotSelectedColor = Color.cyan;
+
+    [Tooltip("Couleur normale des slots inventaire")]
+    public Color m_slotNormalColor = Color.white;
+
+    [Tooltip("Couleur des slots hotbar (0 et 1) dans le panel inventaire")]
+    public Color m_hotbarSlotColor = new Color(1f, 0.85f, 0.3f, 1f);
+
     [Header("Référence")]
     public Inventory m_inventory;
 
+    public static bool IsOpen { get; private set; } = false;
+
     private bool m_inventoryOpen = false;
-    private int m_selectedSlot = -1; // slot en attente de déplacement (-1 = aucun)
+    private int m_selectedSlot = -1;
+
+    void Awake()
+    {
+        // Wiring des clics avant tout
+        for (int i = 0; i < m_slotButtons.Length; i++)
+        {
+            int index = i;
+            if (m_slotButtons[i] != null)
+                m_slotButtons[i].onClick.AddListener(() => OnSlotClicked(index));
+        }
+    }
 
     void Start()
     {
@@ -68,34 +93,38 @@ public class InventoryUI : MonoBehaviour
         if (m_inventory != null)
             m_inventory.OnInventoryChanged += RefreshUI;
 
-        // Wiring des clics sur les slots
-        for (int i = 0; i < m_slotButtons.Length; i++)
-        {
-            int index = i;
-            if (m_slotButtons[i] != null)
-                m_slotButtons[i].onClick.AddListener(() => OnSlotClicked(index));
-        }
-
         RefreshUI();
     }
 
-    /// <summary>
-    /// Premier clic : sélectionne le slot source.
-    /// Deuxième clic : échange le slot source avec le slot cible.
-    /// </summary>
+    private void AssignToHotbar(int hotbarIndex)
+    {
+        if (m_selectedSlot == hotbarIndex) { m_selectedSlot = -1; RefreshUI(); return; }
+        m_inventory.SwapSlots(m_selectedSlot, hotbarIndex);
+        m_selectedSlot = -1;
+        RefreshUI();
+    }
+
+    public void OnSlotClickedPublic(int index) => OnSlotClicked(index);
+
     private void OnSlotClicked(int index)
     {
+        Debug.Log($"[InventoryUI] Slot cliqué : {index} | inventory null : {m_inventory == null}");
         if (m_inventory == null) return;
 
         if (m_selectedSlot == -1)
         {
-            // Sélectionne le slot si non vide
+            // Sélectionne uniquement si le slot n'est pas vide
             if (!m_inventory.GetSlots()[index].IsEmpty())
                 m_selectedSlot = index;
         }
+        else if (m_selectedSlot == index)
+        {
+            // Clic sur le même slot → annule la sélection
+            m_selectedSlot = -1;
+        }
         else
         {
-            // Échange avec le slot cible
+            // Échange et désélectionne
             m_inventory.SwapSlots(m_selectedSlot, index);
             m_selectedSlot = -1;
         }
@@ -107,8 +136,32 @@ public class InventoryUI : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             m_inventoryOpen = !m_inventoryOpen;
+            IsOpen = m_inventoryOpen;
             if (m_inventoryPanel != null)
                 m_inventoryPanel.SetActive(m_inventoryOpen);
+
+            if (!m_inventoryOpen)
+            {
+                m_selectedSlot = -1;
+                RefreshUI();
+            }
+        }
+
+        // Échap annule la sélection
+        if (Input.GetKeyDown(KeyCode.Escape) && m_selectedSlot != -1)
+        {
+            m_selectedSlot = -1;
+            RefreshUI();
+        }
+
+        // Si un slot est sélectionné : 1 ou 2 l'assigne à la hotbar correspondante
+        if (m_selectedSlot != -1)
+        {
+            // Supporte clavier AZERTY (&/é) et QWERTY (1/2)
+            if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Ampersand))
+                AssignToHotbar(0);
+            if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.At))
+                AssignToHotbar(1);
         }
     }
 
@@ -152,6 +205,17 @@ public class InventoryUI : MonoBehaviour
 
             if (m_slotQuantities[i] != null)
                 m_slotQuantities[i].text = (!empty && slots[i].m_quantity > 1) ? slots[i].m_quantity.ToString() : "";
+
+            // Couleur du cadre : sélectionné > hotbar > normal
+            if (i < m_slotFrames.Length && m_slotFrames[i] != null)
+            {
+                if (i == m_selectedSlot)
+                    m_slotFrames[i].color = m_slotSelectedColor;
+                else if (i < Inventory.HOTBAR_SLOTS)
+                    m_slotFrames[i].color = m_hotbarSlotColor;
+                else
+                    m_slotFrames[i].color = m_slotNormalColor;
+            }
         }
     }
 

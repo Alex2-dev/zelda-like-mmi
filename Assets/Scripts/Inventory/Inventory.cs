@@ -76,6 +76,11 @@ public class Inventory : MonoBehaviour
         return false;
     }
 
+    /// Déclenché quand une arme est activée : float = durée de rechargement
+    public System.Action<float> OnWeaponEquipped;
+    /// Déclenché quand il n'y a pas assez de munitions
+    public System.Action<string> OnShowMessage;
+
     /// <summary>Utilise l'objet dans le slot hotbar sélectionné.</summary>
     public void UseSelectedItem()
     {
@@ -83,11 +88,31 @@ public class Inventory : MonoBehaviour
         if (slot.IsEmpty()) return;
         if (slot.m_item.m_effect == null) return;
 
+        // Cas arme : ne pas consommer l'item, vérifier les munitions
+        if (slot.m_item.m_effect is EquipWeaponEffect weaponEffect && weaponEffect.m_weaponData != null)
+        {
+            WeaponManager wm = GetComponent<WeaponManager>();
+            if (wm != null)
+            {
+                int ammo = wm.GetAmmo(weaponEffect.m_weaponData.m_ammoType);
+                if (ammo <= 0)
+                {
+                    OnShowMessage?.Invoke("Consomme des balles d'abord !");
+                    return;
+                }
+                // A des munitions : équipe sans supprimer l'item
+                weaponEffect.ApplyEffect(gameObject);
+                OnWeaponEquipped?.Invoke(weaponEffect.m_weaponData.m_equipTime);
+                OnInventoryChanged?.Invoke();
+                return;
+            }
+        }
+
+        // Comportement normal pour les non-armes
         slot.m_item.m_effect.ApplyEffect(gameObject);
         slot.m_quantity--;
         if (slot.m_quantity <= 0)
             slot.Clear();
-
         OnInventoryChanged?.Invoke();
     }
 

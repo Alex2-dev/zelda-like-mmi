@@ -16,6 +16,8 @@ GameObject:
   - component: {fileID: -8101895990510760057}
   - component: {fileID: 1087443131992026344}
   - component: {fileID: 1407498146238640095}
+  - component: {fileID: -4570989372287705989}
+  - component: {fileID: -5029742715970489741}
   m_Layer: 0
   m_Name: gobelin
   m_TagString: Enemy
@@ -98,7 +100,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1703325566970149909}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -115,8 +117,8 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
+  m_CollisionDetection: 1
+  m_Constraints: 4
 --- !u!70 &5378980409903490149
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -166,6 +168,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_maxHealth: 100
   m_currentHealth: 0
+  m_dropPrefabs:
+  - {fileID: 5488917583686616538, guid: d566d0e3aeea73a48b2d3d48559213fa, type: 3}
+  - {fileID: 1680317245589121322, guid: bd8454a7db49d0c4f9033a716a52280c, type: 3}
+  - {fileID: 8111302604834819524, guid: f15090ee2609f4e4dba4b2742d12795e, type: 3}
+  - {fileID: 6734846682637737497, guid: febdacdaaccd3f547b120a8f9594906c, type: 3}
+  - {fileID: 5415366694420493894, guid: 91974934b66902e4c926248f7b3763a7, type: 3}
+  - {fileID: 9095893212747456998, guid: 12fdaec0021c4914ab6f2e54b3d19a67, type: 3}
+  m_dropChances:
+  - 1
+  - 1
+  - 1
+  - 0.432
+  - 0.432
+  - 0.313
+  m_dropScatter: 0.4
 --- !u!114 &-8101895990510760057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -179,10 +196,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_speed: 10
-  m_separationRadius: 0.6
-  m_separationForce: 3
+  m_separationRadius: 1
+  m_separationForce: 8
+  m_detectionRange: 25
+  m_patrolSpeed: 10
+  m_patrolWaitMin: 1
+  m_patrolWaitMax: 3
   m_damage: 10
   m_damageCooldown: 1
+  m_homeZone: {fileID: 0}
+  m_patrolRadius: 8
 --- !u!114 &1087443131992026344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,3 +244,73 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!58 &-4570989372287705989
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1703325566970149909}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1.9
+--- !u!58 &-5029742715970489741
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1703325566970149909}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1.6

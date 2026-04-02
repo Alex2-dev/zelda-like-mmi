@@ -31,14 +31,14 @@ public class AlterEgoManager : MonoBehaviour
     [Tooltip("Délai avant de pouvoir repasser en alter ego après retour (secondes)")]
     public float m_cooldown = 5f;
 
-    [Header("Dash")]
-    [Tooltip("Vitesse du dash (unités Unity/sec)")]
-    public float m_dashSpeed = 15f;
+    [Header("Téléportation")]
+    [Tooltip("Transform vide placé devant le joueur (enfant du Player, suit la direction)")]
+    public Transform m_teleportTarget;
 
-    [Tooltip("Durée du dash (secondes)")]
-    public float m_dashDuration = 0.2f;
+    [Tooltip("Distance de téléportation (unités Unity)")]
+    public float m_teleportDistance = 3f;
 
-    [Tooltip("Délai entre deux dashs (secondes)")]
+    [Tooltip("Délai entre deux téléportations (secondes)")]
     public float m_dashCooldown = 1f;
 
     // État
@@ -99,12 +99,9 @@ public class AlterEgoManager : MonoBehaviour
                 ExitAlterEgo(forced: true);
         }
 
-        // Touche F : dash (alter ego uniquement)
+        // Touche F : téléportation (alter ego uniquement)
         if (IsAlterEgo && Input.GetKeyDown(KeyCode.F) && m_currentDashCooldown <= 0f && !IsDashing)
-        {
-            Vector2 dashDir = m_playerBehavior.GetShootDirectionVector();
-            StartCoroutine(DashCoroutine(dashDir));
-        }
+            Teleport();
     }
 
     private void EnterAlterEgo()
@@ -132,30 +129,20 @@ public class AlterEgoManager : MonoBehaviour
             m_playerStats.TakeDamage(m_returnDamage);
     }
 
-    private IEnumerator DashCoroutine(Vector2 dir)
+    private void Teleport()
     {
-        IsDashing = true;
-        foreach (var col in m_colliders) col.enabled = false;
-        bool originalKinematic = m_rb2D.isKinematic;
+        if (m_teleportTarget == null) return;
+
+        Vector2 dir = m_playerBehavior.GetShootDirectionVector();
+        Vector2 destination = (Vector2)transform.position + dir * m_teleportDistance;
+
+        // Désactive la physique le temps du TP pour que MovePosition ne l'écrase pas
         m_rb2D.isKinematic = true;
-        m_rb2D.velocity = Vector2.zero;
+        transform.position = destination;
+        m_rb2D.position    = destination;
+        m_rb2D.velocity    = Vector2.zero;
+        m_rb2D.isKinematic = false;
 
-        Vector2 startPos  = m_rb2D.position;
-        Vector2 targetPos = startPos + dir * m_dashSpeed * m_dashDuration;
-
-        float elapsed = 0f;
-        while (elapsed < m_dashDuration)
-        {
-            m_rb2D.position = Vector2.Lerp(startPos, targetPos, elapsed / m_dashDuration);
-            elapsed += Time.fixedDeltaTime;
-            yield return new WaitForFixedUpdate();
-        }
-
-        m_rb2D.position = targetPos;
-        m_rb2D.velocity = Vector2.zero;
-        m_rb2D.isKinematic = originalKinematic;
-        foreach (var col in m_colliders) col.enabled = true;
-        IsDashing = false;
         m_currentDashCooldown = m_dashCooldown;
     }
 }

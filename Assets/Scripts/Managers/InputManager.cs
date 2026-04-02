@@ -16,6 +16,8 @@ public class InputManager : MonoBehaviour
     private InputAction m_inventoryAction;
     private InputAction m_runAction;
     private InputAction m_hideAction;
+    private InputAction m_dashAction;
+    private InputAction m_alterEgoAction;
     private InputAction m_mapAction;
     private InputAction m_hotbar1Action;
     private InputAction m_hotbar2Action;
@@ -48,6 +50,8 @@ public class InputManager : MonoBehaviour
     public bool    InventoryPressed => m_inventoryAction.WasPressedThisFrame();
     public bool    RunHeld          => m_runAction.IsPressed();
     public bool    HidePressed      => m_hideAction.WasPressedThisFrame();
+    public bool    DashPressed      => m_dashAction.WasPressedThisFrame();
+    public bool    AlterEgoPressed  => m_alterEgoAction.WasPressedThisFrame();
     public bool    MapPressed       => m_mapAction.WasPressedThisFrame();
     public bool    Hotbar1Pressed   => m_hotbar1Action.WasPressedThisFrame();
     public bool    Hotbar2Pressed   => m_hotbar2Action.WasPressedThisFrame();
@@ -65,6 +69,8 @@ public class InputManager : MonoBehaviour
             "Inventory" => m_inventoryAction,
             "Run"       => m_runAction,
             "Hide"      => m_hideAction,
+            "Dash"      => m_dashAction,
+            "AlterEgo"  => m_alterEgoAction,
             "Map"       => m_mapAction,
             "Hotbar1"   => m_hotbar1Action,
             "Hotbar2"   => m_hotbar2Action,
@@ -141,6 +147,16 @@ public class InputManager : MonoBehaviour
         m_hideAction.AddBinding("<Keyboard>/f");
         m_hideAction.AddBinding("<Gamepad>/buttonEast");
 
+        // Dash (alter ego uniquement — partage F avec Hide, contexte géré par AlterEgoManager)
+        m_dashAction = new InputAction("Dash", InputActionType.Button);
+        m_dashAction.AddBinding("<Keyboard>/f");
+        m_dashAction.AddBinding("<Gamepad>/buttonEast");
+
+        // Alter Ego — bascule la transformation
+        m_alterEgoAction = new InputAction("AlterEgo", InputActionType.Button);
+        m_alterEgoAction.AddBinding("<Keyboard>/tab");
+        m_alterEgoAction.AddBinding("<Gamepad>/rightStickPress");
+
         // Carte
         m_mapAction = new InputAction("Map", InputActionType.Button);
         m_mapAction.AddBinding("<Keyboard>/m");
@@ -173,6 +189,8 @@ public class InputManager : MonoBehaviour
         m_inventoryAction.Enable();
         m_runAction.Enable();
         m_hideAction.Enable();
+        m_dashAction.Enable();
+        m_alterEgoAction.Enable();
         m_mapAction.Enable();
         m_hotbar1Action.Enable();
         m_hotbar2Action.Enable();

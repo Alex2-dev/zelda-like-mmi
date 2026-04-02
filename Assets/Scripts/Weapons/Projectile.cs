@@ -29,6 +29,10 @@ public class Projectile : MonoBehaviour
         m_speed = speed;
         m_traveledDistance = 0f;
         m_launched = true;
+
+        // Oriente le sprite selon la direction
+        float angle = Mathf.Atan2(m_direction.y, m_direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0f, 0f, angle);
     }
 
     void Update()

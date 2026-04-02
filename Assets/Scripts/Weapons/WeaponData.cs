@@ -39,4 +39,8 @@ public class WeaponData : ScriptableObject
     [Header("Prefab projectile")]
     [Tooltip("Prefab avec Projectile.cs, Rigidbody2D Kinematic, CircleCollider2D (Is Trigger), layer Projectile")]
     public GameObject m_projectilePrefab;
+
+    [Header("Rechargement")]
+    [Tooltip("Durée du cercle de rechargement quand on équipe l'arme (secondes)")]
+    public float m_equipTime = 1f;
 }
