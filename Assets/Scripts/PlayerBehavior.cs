@@ -72,8 +72,9 @@ public class PlayerBehavior : MonoBehaviour
     {
         // If a dialog is on screen, the player should not be updated
         // If the map is displayed, the player should not be updated
-        if (m_dialogDisplayer.IsOnScreen() || m_map.activeSelf)
+        if (m_dialogDisplayer.IsOnScreen() || m_map.activeSelf || InventoryUI.IsOpen)
         {
+            m_rb2D.velocity = Vector2.zero;
             return;
         }
 
@@ -90,14 +91,19 @@ public class PlayerBehavior : MonoBehaviour
 
     private void Move()
     {
-        float horizontalOffset = Input.GetAxis("Horizontal");
-        float verticalOffset = Input.GetAxis("Vertical");
+        Vector2 moveInput = InputManager.Instance != null
+            ? InputManager.Instance.MoveInput
+            : new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+
+        float horizontalOffset = moveInput.x;
+        float verticalOffset   = moveInput.y;
 
         float currentSpeed = m_speed;
-        if (m_playerStats != null && Input.GetKey(KeyCode.LeftShift))
-        {
+        bool running = InputManager.Instance != null
+            ? InputManager.Instance.RunHeld
+            : Input.GetKey(KeyCode.LeftShift);
+        if (m_playerStats != null && running)
             currentSpeed *= m_playerStats.m_runMultiplier;
-        }
 
         // Translates the player to a new position, at a given speed.
         Vector2 newPos = new Vector2(transform.position.x + horizontalOffset * currentSpeed,
@@ -155,30 +161,27 @@ public class PlayerBehavior : MonoBehaviour
 
         // If the player presses M, the map will be activated if not on screen
         // or desactivated if already on screen
-        if (Input.GetKeyDown(KeyCode.M))
-        {
+        bool mapPressed = InputManager.Instance != null
+            ? InputManager.Instance.MapPressed
+            : Input.GetKeyDown(KeyCode.M);
+        if (mapPressed)
             m_map.SetActive(!m_map.activeSelf);
-        }
 
         // Inventaire : & (Alpha1) = slot 1, é (Alpha2) = slot 2, molette = cycle
-        if (m_inventory != null)
+        if (m_inventory != null && !InventoryUI.IsOpen)
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-                m_inventory.UseHotbarSlot(0);
-            if (Input.GetKeyDown(KeyCode.Alpha2))
-                m_inventory.UseHotbarSlot(1);
+            bool h1 = InputManager.Instance != null ? InputManager.Instance.Hotbar1Pressed : Input.GetKeyDown(KeyCode.Alpha1);
+            bool h2 = InputManager.Instance != null ? InputManager.Instance.Hotbar2Pressed : Input.GetKeyDown(KeyCode.Alpha2);
+            float scroll = InputManager.Instance != null ? InputManager.Instance.ScrollInput : Input.GetAxis("Mouse ScrollWheel");
 
-            float scroll = Input.GetAxis("Mouse ScrollWheel");
-            if (scroll != 0)
-                m_inventory.ScrollHotbar(scroll);
+            if (h1) m_inventory.UseHotbarSlot(0);
+            if (h2) m_inventory.UseHotbarSlot(1);
+            if (scroll != 0) m_inventory.ScrollHotbar(scroll);
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Application.Quit();
-        }
+        // Quit/Pause handled by GameManager via InputManager.PausePressed
 
-        bool isBlocked = m_dialogDisplayer.IsOnScreen() || m_map.activeSelf;
+        bool isBlocked = m_dialogDisplayer.IsOnScreen() || m_map.activeSelf || InventoryUI.IsOpen;
         if (m_weaponManager != null)
             m_weaponManager.m_canFire = !isBlocked;
 
@@ -195,7 +198,8 @@ public class PlayerBehavior : MonoBehaviour
         // - If there is a dialog ready to be displayed (i.e. the player is closed to a NPC)
         //   then a dialog is set to the dialogManager
         // - If not, then the player will shoot a fireball
-        if (Input.GetKeyDown(KeyCode.Space))
+        bool attackPressed = InputManager.Instance != null ? InputManager.Instance.AttackPressed : Input.GetKeyDown(KeyCode.Space);
+        if (attackPressed)
         {
             if (m_closestNPCDialog != null)
             {
@@ -205,14 +209,9 @@ public class PlayerBehavior : MonoBehaviour
             {
                 m_weaponManager.TryShoot(GetShootDirectionVector());
             }
-            else if (m_weaponManager == null || !m_weaponManager.HasWeapon())
-            {
-                ShootFireball();
-            }
-            // si automatique : géré par WeaponManager.Update()
         }
-            // Si le joueur appuie sur F :
-        if (Input.GetKeyDown(KeyCode.F))
+        bool hidePressed = InputManager.Instance != null ? InputManager.Instance.HidePressed : Input.GetKeyDown(KeyCode.F);
+        if (hidePressed)
         {
             // En alter ego, F est géré par AlterEgoManager (dash)
             if (m_alterEgoManager != null && m_alterEgoManager.IsAlterEgo)
