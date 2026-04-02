@@ -11,11 +11,26 @@ public class GameManager : MonoBehaviour
     private const string MAIN_SCENE = "MainScene";
     private const string MENU_SCENE = "MenuScene";
 
+    [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void ResetInstance()
+    {
+        Debug.Log("[GameManager] ResetInstance appelé (BeforeSceneLoad)");
+        Instance = null;
+    }
+
     void Awake()
     {
-        if (Instance != null) { Destroy(gameObject); return; }
+        Debug.Log($"[GameManager] Awake — Instance actuelle = {(Instance == null ? "null" : Instance.GetInstanceID().ToString())} / this = {GetInstanceID()}");
+        if (Instance != null && Instance != this) { Debug.LogWarning("[GameManager] Doublon détecté, Destroy(this)"); Destroy(this); return; }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        Debug.Log("[GameManager] Instance correctement initialisée.");
+    }
+
+    void OnDestroy()
+    {
+        Debug.LogWarning($"[GameManager] OnDestroy appelé ! Instance = {(Instance == null ? "null" : "valide")}");
+        if (Instance == this) Instance = null;
     }
 
     // ── Démarrer une partie ──────────────────────────────────────────────────

@@ -25,9 +25,12 @@ public class SaveManager : MonoBehaviour
 
     public const int SLOT_COUNT = 3;
 
+    [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void ResetInstance() => Instance = null;
+
     void Awake()
     {
-        if (Instance != null) { Destroy(gameObject); return; }
+        if (Instance != null && Instance != this) { Destroy(this); return; }
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }

@@ -27,9 +27,12 @@ public class InputManager : MonoBehaviour
     // Clé PlayerPrefs pour les overrides
     private const string BINDINGS_KEY = "InputBindings";
 
+    [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void ResetInstance() => Instance = null;
+
     void Awake()
     {
-        if (Instance != null) { Destroy(gameObject); return; }
+        if (Instance != null && Instance != this) { Destroy(this); return; }
         Instance = this;
         DontDestroyOnLoad(gameObject);
         BuildActions();

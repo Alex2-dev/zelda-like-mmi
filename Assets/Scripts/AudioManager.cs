@@ -10,18 +10,15 @@ public class AudioManager : MonoBehaviour
     private const string MUSIC_VOL_KEY = "MusicVolume";
     private const string SOUND_VOL_KEY = "SoundVolume";
 
+    [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void ResetInstance() => instance = null;
+
     void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-            LoadVolumes();
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        if (instance != null && instance != this) { Destroy(this); return; }
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+        LoadVolumes();
     }
 
     // ── Lecture ─────────────────────────────────────────────────────────────
@@ -68,7 +65,7 @@ public class AudioManager : MonoBehaviour
 
     private void LoadVolumes()
     {
-        m_musicStream.volume = GetMusicVolume();
-        m_soundStream.volume = GetSoundVolume();
+        if (m_musicStream != null) m_musicStream.volume = GetMusicVolume();
+        if (m_soundStream != null) m_soundStream.volume = GetSoundVolume();
     }
 }

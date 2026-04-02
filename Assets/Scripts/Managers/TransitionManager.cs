@@ -20,9 +20,12 @@ public class TransitionManager : MonoBehaviour
     public float m_zoomDuration  = 0.6f;
     public float m_typeSpeed     = 0.05f;
 
+    [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void ResetInstance() => Instance = null;
+
     void Awake()
     {
-        if (Instance != null) { Destroy(gameObject); return; }
+        if (Instance != null && Instance != this) { Destroy(this); return; }
         Instance = this;
         DontDestroyOnLoad(gameObject);
         BuildUI();

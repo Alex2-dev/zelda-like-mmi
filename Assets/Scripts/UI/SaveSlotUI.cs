@@ -19,16 +19,22 @@ public class SaveSlotUI : MonoBehaviour
     void Start()
     {
         m_mainMenu = FindObjectOfType<MainMenuUI>();
-        RefreshSlots();
 
         for (int i = 0; i < m_slotButtons.Length; i++)
         {
+            if (m_slotButtons[i] == null)
+            {
+                Debug.LogError($"[SaveSlotUI] m_slotButtons[{i}] est null ! Vérifie les références dans l'Inspector.");
+                continue;
+            }
             int slot = i;
             m_slotButtons[i].onClick.AddListener(() => SelectSlot(slot));
         }
 
         if (m_backButton != null)
-            m_backButton.onClick.AddListener(() => m_mainMenu.ShowMain());
+            m_backButton.onClick.AddListener(() => m_mainMenu?.ShowMain());
+
+        RefreshSlots();
     }
 
     private void RefreshSlots()
@@ -54,7 +60,12 @@ public class SaveSlotUI : MonoBehaviour
 
     private void SelectSlot(int slot)
     {
-        if (GameManager.Instance == null) return;
+        if (GameManager.Instance == null)
+        {
+            Debug.LogError("[SaveSlotUI] GameManager.Instance est null ! Vérifie que le GameObject Managers est dans la scène MenuScene.");
+            return;
+        }
+        Debug.Log($"[SaveSlotUI] Démarrage slot {slot}");
         GameManager.Instance.StartGame(slot);
     }
 }
