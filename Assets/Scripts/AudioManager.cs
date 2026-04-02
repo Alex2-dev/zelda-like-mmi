@@ -1,49 +1,74 @@
-﻿/* Author : Raphaël Marczak - 2018/2020, for MIAMI Teaching (IUT Tarbes) and MMI Teaching (IUT Bordeaux Montaigne)
- * 
- * This work is licensed under the CC0 License. 
- * 
- */
-
 using UnityEngine;
-using System.Collections;
 
-public class AudioManager : MonoBehaviour {
-	public static AudioManager instance = null;
+public class AudioManager : MonoBehaviour
+{
+    public static AudioManager instance = null;
 
-	public AudioSource m_soundStream;
-	public AudioSource m_musicStream;
+    public AudioSource m_soundStream;
+    public AudioSource m_musicStream;
 
-	void Awake() {
-		if (instance == null) {
-			instance = this;
-            DontDestroyOnLoad(gameObject);
-        } else {
-			Destroy (gameObject);
-		}
-	}
+    private const string MUSIC_VOL_KEY = "MusicVolume";
+    private const string SOUND_VOL_KEY = "SoundVolume";
 
-	public void PlaySound(AudioClip soundClipToPlay, float volume = 1.0f, float pitch = 1.0f) {
-		m_soundStream.pitch = pitch;
-		m_soundStream.volume = volume;
-		m_soundStream.clip = soundClipToPlay;
-		m_soundStream.Play ();
-	}
-
-    public void StopSound()
+    void Awake()
     {
-        m_soundStream.Stop();
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+            LoadVolumes();
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
-    public void PlayMusic(AudioClip musicClipToPlay, bool mustLoop, float volume = 1.0f, float pitch = 1.0f)
+    // ── Lecture ─────────────────────────────────────────────────────────────
+
+    public void PlaySound(AudioClip clip, float volume = 1.0f, float pitch = 1.0f)
     {
-        m_musicStream.pitch = pitch;
-        m_musicStream.volume = volume;
-        m_musicStream.loop = mustLoop;
-        m_musicStream.clip = musicClipToPlay;
+        m_soundStream.pitch  = pitch;
+        m_soundStream.volume = volume * GetSoundVolume();
+        m_soundStream.clip   = clip;
+        m_soundStream.Play();
+    }
+
+    public void StopSound() => m_soundStream.Stop();
+
+    public void PlayMusic(AudioClip clip, bool loop, float volume = 1.0f, float pitch = 1.0f)
+    {
+        m_musicStream.pitch  = pitch;
+        m_musicStream.volume = volume * GetMusicVolume();
+        m_musicStream.loop   = loop;
+        m_musicStream.clip   = clip;
         m_musicStream.Play();
     }
 
-    public void StopMusic() {
-		m_musicStream.Stop();
-	}
+    public void StopMusic() => m_musicStream.Stop();
+
+    // ── Volume ───────────────────────────────────────────────────────────────
+
+    public float GetMusicVolume() => PlayerPrefs.GetFloat(MUSIC_VOL_KEY, 0.8f);
+    public float GetSoundVolume() => PlayerPrefs.GetFloat(SOUND_VOL_KEY, 1.0f);
+
+    public void SetMusicVolume(float value)
+    {
+        value = Mathf.Clamp01(value);
+        PlayerPrefs.SetFloat(MUSIC_VOL_KEY, value);
+        m_musicStream.volume = value;
+    }
+
+    public void SetSoundVolume(float value)
+    {
+        value = Mathf.Clamp01(value);
+        PlayerPrefs.SetFloat(SOUND_VOL_KEY, value);
+        m_soundStream.volume = value;
+    }
+
+    private void LoadVolumes()
+    {
+        m_musicStream.volume = GetMusicVolume();
+        m_soundStream.volume = GetSoundVolume();
+    }
 }
