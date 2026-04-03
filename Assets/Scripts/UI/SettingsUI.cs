@@ -23,8 +23,29 @@ public class SettingsUI : MonoBehaviour
     [Header("Bouton Retour")]
     public Button m_backButton;
 
+    private struct ActionBinding
+    {
+        public string action;
+        public int    bindingIndex;
+        public ActionBinding(string a, int b) { action = a; bindingIndex = b; }
+    }
+
     // Ordre correspondant aux boutons de rebinding
-    private readonly string[] ACTION_NAMES = { "Attack", "Inventory", "Run", "Hide", "Map", "Hotbar1", "Hotbar2" };
+    // Move : binding 0 = composite, 1 = Haut, 2 = Bas, 3 = Gauche, 4 = Droite
+    private static readonly ActionBinding[] ACTIONS =
+    {
+        new ActionBinding("Attack",    0),
+        new ActionBinding("Inventory", 0),
+        new ActionBinding("Run",       0),
+        new ActionBinding("AlterEgo",  0),
+        new ActionBinding("Dash",      0),
+        new ActionBinding("Hotbar1",   0),
+        new ActionBinding("Hotbar2",   0),
+        new ActionBinding("Move",      1), // Haut
+        new ActionBinding("Move",      2), // Bas
+        new ActionBinding("Move",      3), // Gauche
+        new ActionBinding("Move",      4), // Droite
+    };
 
     private MainMenuUI m_mainMenu;
     private bool       m_isRebinding = false;
@@ -47,7 +68,7 @@ public class SettingsUI : MonoBehaviour
 
         // Touches
         RefreshBindLabels();
-        for (int i = 0; i < m_rebindButtons.Length && i < ACTION_NAMES.Length; i++)
+        for (int i = 0; i < m_rebindButtons.Length && i < ACTIONS.Length; i++)
         {
             int idx = i;
             m_rebindButtons[i].onClick.AddListener(() => StartRebind(idx));
@@ -89,10 +110,9 @@ public class SettingsUI : MonoBehaviour
         if (m_isRebinding || InputManager.Instance == null) return;
         m_isRebinding = true;
 
-        string actionName = ACTION_NAMES[actionIndex];
         m_bindLabels[actionIndex].text = "Appuie sur une touche...";
 
-        InputManager.Instance.StartRebinding(actionName, 0, () =>
+        InputManager.Instance.StartRebinding(ACTIONS[actionIndex].action, ACTIONS[actionIndex].bindingIndex, () =>
         {
             m_isRebinding = false;
             RefreshBindLabels();
@@ -102,7 +122,7 @@ public class SettingsUI : MonoBehaviour
     private void RefreshBindLabels()
     {
         if (InputManager.Instance == null) return;
-        for (int i = 0; i < m_bindLabels.Length && i < ACTION_NAMES.Length; i++)
-            m_bindLabels[i].text = InputManager.Instance.GetBindingDisplayString(ACTION_NAMES[i], 0);
+        for (int i = 0; i < m_bindLabels.Length && i < ACTIONS.Length; i++)
+            m_bindLabels[i].text = InputManager.Instance.GetBindingDisplayString(ACTIONS[i].action, ACTIONS[i].bindingIndex);
     }
 }
