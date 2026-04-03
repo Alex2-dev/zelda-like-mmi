@@ -106,6 +106,8 @@ public class InputManager : MonoBehaviour
         m_inventoryAction.RemoveAllBindingOverrides();
         m_runAction.RemoveAllBindingOverrides();
         m_hideAction.RemoveAllBindingOverrides();
+        m_dashAction.RemoveAllBindingOverrides();
+        m_alterEgoAction.RemoveAllBindingOverrides();
         m_mapAction.RemoveAllBindingOverrides();
         m_hotbar1Action.RemoveAllBindingOverrides();
         m_hotbar2Action.RemoveAllBindingOverrides();
@@ -157,7 +159,7 @@ public class InputManager : MonoBehaviour
 
         // Alter Ego — bascule la transformation
         m_alterEgoAction = new InputAction("AlterEgo", InputActionType.Button);
-        m_alterEgoAction.AddBinding("<Keyboard>/tab");
+        m_alterEgoAction.AddBinding("<Keyboard>/a");
         m_alterEgoAction.AddBinding("<Gamepad>/rightStickPress");
 
         // Carte
@@ -208,6 +210,8 @@ public class InputManager : MonoBehaviour
         m_inventoryAction?.Disable();
         m_runAction?.Disable();
         m_hideAction?.Disable();
+        m_dashAction?.Disable();
+        m_alterEgoAction?.Disable();
         m_mapAction?.Disable();
         m_hotbar1Action?.Disable();
         m_hotbar2Action?.Disable();
@@ -224,6 +228,8 @@ public class InputManager : MonoBehaviour
             inventory = m_inventoryAction.SaveBindingOverridesAsJson(),
             run       = m_runAction.SaveBindingOverridesAsJson(),
             hide      = m_hideAction.SaveBindingOverridesAsJson(),
+            dash      = m_dashAction.SaveBindingOverridesAsJson(),
+            alterEgo  = m_alterEgoAction.SaveBindingOverridesAsJson(),
             map       = m_mapAction.SaveBindingOverridesAsJson(),
             hotbar1   = m_hotbar1Action.SaveBindingOverridesAsJson(),
             hotbar2   = m_hotbar2Action.SaveBindingOverridesAsJson(),
@@ -241,6 +247,8 @@ public class InputManager : MonoBehaviour
         m_inventoryAction.LoadBindingOverridesFromJson(data.inventory);
         m_runAction.LoadBindingOverridesFromJson(data.run);
         m_hideAction.LoadBindingOverridesFromJson(data.hide);
+        if (data.dash    != null) m_dashAction.LoadBindingOverridesFromJson(data.dash);
+        if (data.alterEgo != null) m_alterEgoAction.LoadBindingOverridesFromJson(data.alterEgo);
         m_mapAction.LoadBindingOverridesFromJson(data.map);
         m_hotbar1Action.LoadBindingOverridesFromJson(data.hotbar1);
         m_hotbar2Action.LoadBindingOverridesFromJson(data.hotbar2);
@@ -249,6 +257,6 @@ public class InputManager : MonoBehaviour
     [System.Serializable]
     private class BindingSaveData
     {
-        public string move, attack, inventory, run, hide, map, hotbar1, hotbar2;
+        public string move, attack, inventory, run, hide, dash, alterEgo, map, hotbar1, hotbar2;
     }
 }
