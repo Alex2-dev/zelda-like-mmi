@@ -3,7 +3,17 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance { get; private set; }
+    private static GameManager m_instance;
+    public static GameManager Instance
+    {
+        get
+        {
+            if (m_instance == null)
+                m_instance = FindObjectOfType<GameManager>();
+            return m_instance;
+        }
+        private set => m_instance = value;
+    }
 
     public int  ActiveSlot   { get; private set; } = 0;
     public bool BossDefeated { get; private set; } = false;
@@ -11,25 +21,15 @@ public class GameManager : MonoBehaviour
     private const string MAIN_SCENE = "MainScene";
     private const string MENU_SCENE = "MenuScene";
 
-    [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.BeforeSceneLoad)]
-    static void ResetInstance()
-    {
-        Debug.Log("[GameManager] ResetInstance appelé (BeforeSceneLoad)");
-        Instance = null;
-    }
-
     void Awake()
     {
-        Debug.Log($"[GameManager] Awake — Instance actuelle = {(Instance == null ? "null" : Instance.GetInstanceID().ToString())} / this = {GetInstanceID()}");
-        if (Instance != null && Instance != this) { Debug.LogWarning("[GameManager] Doublon détecté, Destroy(this)"); Destroy(this); return; }
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        Debug.Log("[GameManager] Instance correctement initialisée.");
     }
 
     void OnDestroy()
     {
-        Debug.LogWarning($"[GameManager] OnDestroy appelé ! Instance = {(Instance == null ? "null" : "valide")}");
         if (Instance == this) Instance = null;
     }
 
