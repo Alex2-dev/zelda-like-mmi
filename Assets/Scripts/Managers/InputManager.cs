@@ -121,9 +121,9 @@ public class InputManager : MonoBehaviour
         // Mouvement — composite WASD + stick gauche manette
         m_moveAction = new InputAction("Move", InputActionType.Value);
         m_moveAction.AddCompositeBinding("2DVector")
-            .With("Up",    "<Keyboard>/w")
+            .With("Up",    "<Keyboard>/z")
             .With("Down",  "<Keyboard>/s")
-            .With("Left",  "<Keyboard>/a")
+            .With("Left",  "<Keyboard>/q")
             .With("Right", "<Keyboard>/d");
         m_moveAction.AddCompositeBinding("2DVector")
             .With("Up",    "<Keyboard>/upArrow")
