@@ -121,9 +121,9 @@ public class InputManager : MonoBehaviour
         // Mouvement — composite WASD + stick gauche manette
         m_moveAction = new InputAction("Move", InputActionType.Value);
         m_moveAction.AddCompositeBinding("2DVector")
-            .With("Up",    "<Keyboard>/z")
+            .With("Up",    "<Keyboard>/w")
             .With("Down",  "<Keyboard>/s")
-            .With("Left",  "<Keyboard>/q")
+            .With("Left",  "<Keyboard>/a")
             .With("Right", "<Keyboard>/d");
         m_moveAction.AddCompositeBinding("2DVector")
             .With("Up",    "<Keyboard>/upArrow")
@@ -159,7 +159,7 @@ public class InputManager : MonoBehaviour
 
         // Alter Ego — bascule la transformation
         m_alterEgoAction = new InputAction("AlterEgo", InputActionType.Button);
-        m_alterEgoAction.AddBinding("<Keyboard>/a");
+        m_alterEgoAction.AddBinding("<Keyboard>/q");
         m_alterEgoAction.AddBinding("<Gamepad>/rightStickPress");
 
         // Carte
