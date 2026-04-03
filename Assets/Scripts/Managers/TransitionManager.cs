@@ -130,15 +130,17 @@ public class TransitionManager : MonoBehaviour
 
     private void BuildUI()
     {
-        m_canvas = gameObject.AddComponent<Canvas>();
+        var canvasGO = new GameObject("TransitionCanvas");
+        canvasGO.transform.SetParent(transform, false);
+        m_canvas = canvasGO.AddComponent<Canvas>();
         m_canvas.renderMode   = RenderMode.ScreenSpaceOverlay;
         m_canvas.sortingOrder = 999;
-        gameObject.AddComponent<CanvasScaler>();
-        gameObject.AddComponent<GraphicRaycaster>();
+        canvasGO.AddComponent<CanvasScaler>();
+        canvasGO.AddComponent<GraphicRaycaster>();
 
         // Fond noir
         var bg = new GameObject("Background");
-        bg.transform.SetParent(transform, false);
+        bg.transform.SetParent(canvasGO.transform, false);
         m_fadeGroup = bg.AddComponent<CanvasGroup>();
         var bgImg  = bg.AddComponent<Image>();
         bgImg.color = Color.black;
