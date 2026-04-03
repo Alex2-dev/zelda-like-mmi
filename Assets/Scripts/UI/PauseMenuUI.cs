@@ -68,7 +68,10 @@ public class PauseMenuUI : MonoBehaviour
         if (GameManager.Instance == null) return;
         GameManager.Instance.QuickSave();
         if (m_saveLabel != null)
-            StartCoroutine(SaveFeedback());
+        {
+            StopCoroutine(nameof(SaveFeedback));
+            StartCoroutine(nameof(SaveFeedback));
+        }
     }
 
     public void QuitToMenu()

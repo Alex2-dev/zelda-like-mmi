@@ -165,7 +165,7 @@ public class InputManager : MonoBehaviour
         // Carte
         m_mapAction = new InputAction("Map", InputActionType.Button);
         m_mapAction.AddBinding("<Keyboard>/m");
-        m_mapAction.AddBinding("<Gamepad>/start");
+        m_mapAction.AddBinding("<Gamepad>/select");
 
         // Hotbar
         m_hotbar1Action = new InputAction("Hotbar1", InputActionType.Button);
