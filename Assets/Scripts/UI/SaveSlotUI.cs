@@ -60,12 +60,13 @@ public class SaveSlotUI : MonoBehaviour
 
     private void SelectSlot(int slot)
     {
-        if (GameManager.Instance == null)
+        GameManager gm = GameManager.Instance;
+        if (gm == null) gm = FindObjectOfType<GameManager>();
+        if (gm == null)
         {
-            Debug.LogError("[SaveSlotUI] GameManager.Instance est null ! Vérifie que le GameObject Managers est dans la scène MenuScene.");
+            Debug.LogError("[SaveSlotUI] GameManager introuvable dans la scène !");
             return;
         }
-        Debug.Log($"[SaveSlotUI] Démarrage slot {slot}");
-        GameManager.Instance.StartGame(slot);
+        gm.StartGame(slot);
     }
 }
