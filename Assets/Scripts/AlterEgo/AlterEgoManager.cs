@@ -82,8 +82,11 @@ public class AlterEgoManager : MonoBehaviour
         if (m_currentDashCooldown > 0f)
             m_currentDashCooldown -= Time.deltaTime;
 
-        // Touche A : bascule
-        if (Input.GetKeyDown(KeyCode.Q))
+        // Bascule alter ego
+        bool alterEgoPressed = InputManager.Instance != null
+            ? InputManager.Instance.AlterEgoPressed
+            : Input.GetKeyDown(KeyCode.Tab);
+        if (alterEgoPressed)
         {
             if (IsAlterEgo)
                 ExitAlterEgo(forced: false);
@@ -99,8 +102,11 @@ public class AlterEgoManager : MonoBehaviour
                 ExitAlterEgo(forced: true);
         }
 
-        // Touche F : téléportation (alter ego uniquement)
-        if (IsAlterEgo && Input.GetKeyDown(KeyCode.F) && m_currentDashCooldown <= 0f && !IsDashing)
+        // Dash / téléportation (alter ego uniquement)
+        bool dashPressed = InputManager.Instance != null
+            ? InputManager.Instance.DashPressed
+            : Input.GetKeyDown(KeyCode.F);
+        if (IsAlterEgo && dashPressed && m_currentDashCooldown <= 0f && !IsDashing)
             Teleport();
     }
 

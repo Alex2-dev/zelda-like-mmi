@@ -21,8 +21,12 @@ public class PauseMenuUI : MonoBehaviour
 
     void Update()
     {
-        if (InputManager.Instance != null && InputManager.Instance.PausePressed)
+        if (InputManager.Instance == null) { Debug.LogWarning("[PauseMenuUI] InputManager.Instance est null"); return; }
+        if (InputManager.Instance.PausePressed)
+        {
+            Debug.Log("[PauseMenuUI] Échap détecté — m_pausePanel=" + m_pausePanel);
             TogglePause();
+        }
     }
 
     // ── API publique ────────────────────────────────────────────────────────
