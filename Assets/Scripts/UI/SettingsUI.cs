@@ -23,6 +23,10 @@ public class SettingsUI : MonoBehaviour
     [Header("Bouton Retour")]
     public Button m_backButton;
 
+    [Header("Bouton Sauvegarder")]
+    public Button              m_saveButton;
+    public TextMeshProUGUI     m_saveLabel;
+
     private struct ActionBinding
     {
         public string action;
@@ -77,6 +81,9 @@ public class SettingsUI : MonoBehaviour
         if (m_backButton != null)
             m_backButton.onClick.AddListener(() => m_mainMenu.ShowMain());
 
+        if (m_saveButton != null)
+            m_saveButton.onClick.AddListener(OnSaveClicked);
+
         ShowTouches();
     }
 
@@ -117,6 +124,21 @@ public class SettingsUI : MonoBehaviour
             m_isRebinding = false;
             RefreshBindLabels();
         });
+    }
+
+    private void OnSaveClicked()
+    {
+        if (InputManager.Instance == null) return;
+        InputManager.Instance.SaveBindings();
+        if (m_saveLabel != null)
+            StartCoroutine(ShowSavedFeedback());
+    }
+
+    private System.Collections.IEnumerator ShowSavedFeedback()
+    {
+        m_saveLabel.text = "Sauvegardé !";
+        yield return new WaitForSeconds(1.5f);
+        m_saveLabel.text = "Sauvegarder";
     }
 
     private void RefreshBindLabels()

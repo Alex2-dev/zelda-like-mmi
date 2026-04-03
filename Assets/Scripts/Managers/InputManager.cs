@@ -219,7 +219,7 @@ public class InputManager : MonoBehaviour
         m_pauseAction?.Disable();
     }
 
-    private void SaveBindings()
+    public void SaveBindings()
     {
         var data = new BindingSaveData
         {
