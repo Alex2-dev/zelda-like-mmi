@@ -18,11 +18,11 @@ public class InputManager : MonoBehaviour
     private InputAction m_hideAction;
     private InputAction m_dashAction;
     private InputAction m_alterEgoAction;
-    private InputAction m_mapAction;
     private InputAction m_hotbar1Action;
     private InputAction m_hotbar2Action;
     private InputAction m_scrollAction;
     private InputAction m_pauseAction;
+    private InputAction m_placeMessageAction;
 
     // Clé PlayerPrefs pour les overrides
     private const string BINDINGS_KEY = "InputBindings";
@@ -55,11 +55,11 @@ public class InputManager : MonoBehaviour
     public bool    HidePressed      => m_hideAction.WasPressedThisFrame();
     public bool    DashPressed      => m_dashAction.WasPressedThisFrame();
     public bool    AlterEgoPressed  => m_alterEgoAction.WasPressedThisFrame();
-    public bool    MapPressed       => m_mapAction.WasPressedThisFrame();
     public bool    Hotbar1Pressed   => m_hotbar1Action.WasPressedThisFrame();
     public bool    Hotbar2Pressed   => m_hotbar2Action.WasPressedThisFrame();
     public float   ScrollInput      => m_scrollAction.ReadValue<float>();
-    public bool    PausePressed     => m_pauseAction.WasPressedThisFrame();
+    public bool    PausePressed        => m_pauseAction.WasPressedThisFrame();
+    public bool    PlaceMessagePressed => m_placeMessageAction.WasPressedThisFrame();
 
     // ── Rebinding ───────────────────────────────────────────────────────────
 
@@ -74,7 +74,6 @@ public class InputManager : MonoBehaviour
             "Hide"      => m_hideAction,
             "Dash"      => m_dashAction,
             "AlterEgo"  => m_alterEgoAction,
-            "Map"       => m_mapAction,
             "Hotbar1"   => m_hotbar1Action,
             "Hotbar2"   => m_hotbar2Action,
             _           => null
@@ -108,7 +107,6 @@ public class InputManager : MonoBehaviour
         m_hideAction.RemoveAllBindingOverrides();
         m_dashAction.RemoveAllBindingOverrides();
         m_alterEgoAction.RemoveAllBindingOverrides();
-        m_mapAction.RemoveAllBindingOverrides();
         m_hotbar1Action.RemoveAllBindingOverrides();
         m_hotbar2Action.RemoveAllBindingOverrides();
         PlayerPrefs.DeleteKey(BINDINGS_KEY);
@@ -162,10 +160,6 @@ public class InputManager : MonoBehaviour
         m_alterEgoAction.AddBinding("<Keyboard>/q");
         m_alterEgoAction.AddBinding("<Gamepad>/rightStickPress");
 
-        // Carte
-        m_mapAction = new InputAction("Map", InputActionType.Button);
-        m_mapAction.AddBinding("<Keyboard>/m");
-
         // Hotbar
         m_hotbar1Action = new InputAction("Hotbar1", InputActionType.Button);
         m_hotbar1Action.AddBinding("<Keyboard>/1");
@@ -184,6 +178,11 @@ public class InputManager : MonoBehaviour
         m_pauseAction = new InputAction("Pause", InputActionType.Button);
         m_pauseAction.AddBinding("<Keyboard>/escape");
         m_pauseAction.AddBinding("<Gamepad>/start");
+
+        // Poser un message (style Dark Souls) — touche N
+        m_placeMessageAction = new InputAction("PlaceMessage", InputActionType.Button);
+        m_placeMessageAction.AddBinding("<Keyboard>/n");
+        m_placeMessageAction.AddBinding("<Gamepad>/rightShoulder");
     }
 
     private void EnableActions()
@@ -195,11 +194,11 @@ public class InputManager : MonoBehaviour
         m_hideAction.Enable();
         m_dashAction.Enable();
         m_alterEgoAction.Enable();
-        m_mapAction.Enable();
         m_hotbar1Action.Enable();
         m_hotbar2Action.Enable();
         m_scrollAction.Enable();
         m_pauseAction.Enable();
+        m_placeMessageAction.Enable();
     }
 
     private void DisableActions()
@@ -211,11 +210,11 @@ public class InputManager : MonoBehaviour
         m_hideAction?.Disable();
         m_dashAction?.Disable();
         m_alterEgoAction?.Disable();
-        m_mapAction?.Disable();
         m_hotbar1Action?.Disable();
         m_hotbar2Action?.Disable();
         m_scrollAction?.Disable();
         m_pauseAction?.Disable();
+        m_placeMessageAction?.Disable();
     }
 
     public void SaveBindings()
@@ -229,7 +228,6 @@ public class InputManager : MonoBehaviour
             hide      = m_hideAction.SaveBindingOverridesAsJson(),
             dash      = m_dashAction.SaveBindingOverridesAsJson(),
             alterEgo  = m_alterEgoAction.SaveBindingOverridesAsJson(),
-            map       = m_mapAction.SaveBindingOverridesAsJson(),
             hotbar1   = m_hotbar1Action.SaveBindingOverridesAsJson(),
             hotbar2   = m_hotbar2Action.SaveBindingOverridesAsJson(),
         };
@@ -248,7 +246,6 @@ public class InputManager : MonoBehaviour
         m_hideAction.LoadBindingOverridesFromJson(data.hide);
         if (data.dash    != null) m_dashAction.LoadBindingOverridesFromJson(data.dash);
         if (data.alterEgo != null) m_alterEgoAction.LoadBindingOverridesFromJson(data.alterEgo);
-        m_mapAction.LoadBindingOverridesFromJson(data.map);
         m_hotbar1Action.LoadBindingOverridesFromJson(data.hotbar1);
         m_hotbar2Action.LoadBindingOverridesFromJson(data.hotbar2);
     }
@@ -256,6 +253,6 @@ public class InputManager : MonoBehaviour
     [System.Serializable]
     private class BindingSaveData
     {
-        public string move, attack, inventory, run, hide, dash, alterEgo, map, hotbar1, hotbar2;
+        public string move, attack, inventory, run, hide, dash, alterEgo, hotbar1, hotbar2;
     }
 }

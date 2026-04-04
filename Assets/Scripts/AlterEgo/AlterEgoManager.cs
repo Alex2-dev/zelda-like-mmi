@@ -78,6 +78,9 @@ public class AlterEgoManager : MonoBehaviour
         if (!IsAlterEgo && m_currentCooldown > 0f)
             m_currentCooldown -= Time.deltaTime;
 
+        // Aucun input si une UI bloquante est ouverte
+        if (MessageUI.IsOpen || InventoryUI.IsOpen) return;
+
         // Décompte cooldown de dash
         if (m_currentDashCooldown > 0f)
             m_currentDashCooldown -= Time.deltaTime;

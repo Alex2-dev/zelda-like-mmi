@@ -28,7 +28,6 @@ public class PlayerBehavior : MonoBehaviour
 
     public GameObject m_fireBall = null; // Object the player can shoot
 
-    public GameObject m_map = null;
     public DialogManager m_dialogDisplayer;
 
     [Tooltip("Référence vers le script PlayerStats (sur ce même GameObject)")]
@@ -71,8 +70,7 @@ public class PlayerBehavior : MonoBehaviour
     void FixedUpdate()
     {
         // If a dialog is on screen, the player should not be updated
-        // If the map is displayed, the player should not be updated
-        if (m_dialogDisplayer.IsOnScreen() || m_map.activeSelf || InventoryUI.IsOpen)
+        if (m_dialogDisplayer.IsOnScreen() || InventoryUI.IsOpen || MessageUI.IsOpen)
         {
             m_rb2D.velocity = Vector2.zero;
             return;
@@ -159,13 +157,12 @@ public class PlayerBehavior : MonoBehaviour
     private void Update()
     {
 
-        // If the player presses M, the map will be activated if not on screen
-        // or desactivated if already on screen
-        bool mapPressed = InputManager.Instance != null
-            ? InputManager.Instance.MapPressed
-            : Input.GetKeyDown(KeyCode.M);
-        if (mapPressed)
-            m_map.SetActive(!m_map.activeSelf);
+        // Poser un message dans le monde (style Dark Souls) — touche N
+        bool placeMessagePressed = InputManager.Instance != null
+            ? InputManager.Instance.PlaceMessagePressed
+            : Input.GetKeyDown(KeyCode.N);
+        if (placeMessagePressed && !m_dialogDisplayer.IsOnScreen() && !InventoryUI.IsOpen)
+            MessageManager.Instance?.OpenComposeUI(transform.position);
 
         // Inventaire : & (Alpha1) = slot 1, é (Alpha2) = slot 2, molette = cycle
         if (m_inventory != null && !InventoryUI.IsOpen)
@@ -181,12 +178,10 @@ public class PlayerBehavior : MonoBehaviour
 
         // Quit/Pause handled by GameManager via InputManager.PausePressed
 
-        bool isBlocked = m_dialogDisplayer.IsOnScreen() || m_map.activeSelf || InventoryUI.IsOpen;
+        bool isBlocked = m_dialogDisplayer.IsOnScreen() || InventoryUI.IsOpen || MessageUI.IsOpen;
         if (m_weaponManager != null)
             m_weaponManager.m_canFire = !isBlocked;
 
-        // If a dialog is on screen, the player should not be updated
-        // If the map is displayed, the player should not be updated
         if (isBlocked)
         {
             return;
