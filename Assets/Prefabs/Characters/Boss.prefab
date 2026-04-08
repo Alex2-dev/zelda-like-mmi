@@ -151,6 +151,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_maxHealth: 100
   m_currentHealth: 0
+  m_sfxHurt: {fileID: 8300000, guid: b20f5209b7c1b0d46803d1cdc65c591d, type: 3}
+  m_sfxDeath: {fileID: 8300000, guid: 75fa127c271fa4e4c9a379069d09c5e5, type: 3}
   m_dropPrefabs: []
   m_dropChances: []
   m_dropScatter: 0.4
@@ -183,7 +185,13 @@ MonoBehaviour:
     type: 3}
   m_invincibilityDuration: 2
   m_phase2Color: {r: 0.6, g: 0, b: 1, a: 1}
-  m_bossZone: {fileID: 0}
+  m_bossZone: {fileID: 8216785660562297952, guid: 1baa0c86aa067af45b7646b4709057af,
+    type: 3}
+  m_sfxMeleeAttack: {fileID: 8300000, guid: afdec8f68aba5fd419415bf48bd2bb05, type: 3}
+  m_sfxShoot: {fileID: 8300000, guid: 7dfd0f73ed5e0d84bafea495fe3d9fab, type: 3}
+  m_sfxPhaseTransition: {fileID: 8300000, guid: 29513cb869d45194b869d572cafc0cc8,
+    type: 3}
+  m_sfxDeath: {fileID: 8300000, guid: 75fa127c271fa4e4c9a379069d09c5e5, type: 3}
 --- !u!58 &840024548815086698
 CircleCollider2D:
   m_ObjectHideFlags: 0

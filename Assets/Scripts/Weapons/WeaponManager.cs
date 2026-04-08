@@ -11,6 +11,10 @@ using UnityEngine;
 /// </summary>
 public class WeaponManager : MonoBehaviour
 {
+    [Header("SFX")]
+    [SerializeField] AudioClip m_sfxShoot;
+    [SerializeField] AudioClip m_sfxNoAmmo;
+
     private WeaponData m_equippedWeapon;
     private Dictionary<AmmoType, int> m_ammoStorage;
     private float m_shootCooldown = 0f;
@@ -68,7 +72,11 @@ public class WeaponManager : MonoBehaviour
     {
         if (m_equippedWeapon == null) return false;
         if (m_shootCooldown > 0f) return false;
-        if (m_ammoStorage[m_equippedWeapon.m_ammoType] < m_equippedWeapon.m_ammoPerShot) return false;
+        if (m_ammoStorage[m_equippedWeapon.m_ammoType] < m_equippedWeapon.m_ammoPerShot)
+        {
+            AudioManager.instance?.PlaySound(m_sfxNoAmmo);
+            return false;
+        }
         if (m_equippedWeapon.m_projectilePrefab == null) return false;
 
         m_ammoStorage[m_equippedWeapon.m_ammoType] -= m_equippedWeapon.m_ammoPerShot;
@@ -88,6 +96,7 @@ public class WeaponManager : MonoBehaviour
         if (proj != null)
             proj.Launch(spreadDir, m_equippedWeapon.m_projectileSpeed, m_equippedWeapon.m_damage, m_equippedWeapon.m_range);
 
+        AudioManager.instance?.PlaySound(m_sfxShoot);
         return true;
     }
 }

@@ -40,6 +40,10 @@ public class ItemLockedPassage : MonoBehaviour
     [Tooltip("GameObject affiché si la condition N'est PAS remplie (ex: panneau 'Clé requise').")]
     [SerializeField] private GameObject m_lockedFeedback;
 
+    [Header("SFX")]
+    [SerializeField] private AudioClip m_sfxOpen;
+    [SerializeField] private AudioClip m_sfxLocked;
+
     private bool m_isOpen = false;
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -103,6 +107,8 @@ public class ItemLockedPassage : MonoBehaviour
         if (m_consumeItems)
             RemoveItems(inventory, m_requiredItem, m_requiredQuantity);
 
+        AudioManager.instance?.PlaySound(m_sfxOpen);
+
         // Désactiver le feedback de verrouillage
         if (m_lockedFeedback != null)
             m_lockedFeedback.SetActive(false);
@@ -135,6 +141,7 @@ public class ItemLockedPassage : MonoBehaviour
     /// <summary>Affiche le feedback de verrouillage si assigné.</summary>
     private void ShowLockedFeedback()
     {
+        AudioManager.instance?.PlaySound(m_sfxLocked);
         if (m_lockedFeedback != null)
             m_lockedFeedback.SetActive(true);
     }

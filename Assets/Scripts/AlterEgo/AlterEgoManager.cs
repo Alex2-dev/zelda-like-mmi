@@ -31,6 +31,11 @@ public class AlterEgoManager : MonoBehaviour
     [Tooltip("Délai avant de pouvoir repasser en alter ego après retour (secondes)")]
     public float m_cooldown = 5f;
 
+    [Header("SFX")]
+    [SerializeField] AudioClip m_sfxEnterAlterEgo;
+    [SerializeField] AudioClip m_sfxExitAlterEgo;
+    [SerializeField] AudioClip m_sfxDash;
+
     [Header("Téléportation")]
     [Tooltip("Transform vide placé devant le joueur (enfant du Player, suit la direction)")]
     public Transform m_teleportTarget;
@@ -116,6 +121,7 @@ public class AlterEgoManager : MonoBehaviour
     private void EnterAlterEgo()
     {
         IsAlterEgo = true;
+        AudioManager.instance?.PlaySound(m_sfxEnterAlterEgo);
         m_remainingAlterEgoTime = m_maxAlterEgoTime;
         if (m_animator != null)
             m_animator.runtimeAnimatorController = m_alterEgoController;
@@ -127,6 +133,7 @@ public class AlterEgoManager : MonoBehaviour
     private void ExitAlterEgo(bool forced)
     {
         IsAlterEgo = false;
+        AudioManager.instance?.PlaySound(m_sfxExitAlterEgo);
         if (m_animator != null)
             m_animator.runtimeAnimatorController = m_normalController;
         else
@@ -152,6 +159,7 @@ public class AlterEgoManager : MonoBehaviour
         m_rb2D.velocity    = Vector2.zero;
         m_rb2D.isKinematic = false;
 
+        AudioManager.instance?.PlaySound(m_sfxDash);
         m_currentDashCooldown = m_dashCooldown;
     }
 }

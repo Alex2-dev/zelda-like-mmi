@@ -133,6 +133,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 213970bba2917114b9dedaf0d75211f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_sfxFootstep: {fileID: 8300000, guid: 1be004883a8159d4fb689d01e3379a7c, type: 3}
+  m_footstepInterval: 0.35
+  m_sfxBreath: {fileID: 8300000, guid: d1652c6bf5eb85545a78072198a424eb, type: 3}
+  m_breathInterval: 4
   m_hideInteractionCollider: {fileID: 271803329804711352}
   m_speed: 1
   m_frontSprite: {fileID: 21300000, guid: 4d1812406f3cf724d9bf26e4afc9ef77, type: 3}
@@ -140,7 +144,6 @@ MonoBehaviour:
   m_rightSprite: {fileID: 21300002, guid: 4d1812406f3cf724d9bf26e4afc9ef77, type: 3}
   m_backSprite: {fileID: 21300004, guid: 4d1812406f3cf724d9bf26e4afc9ef77, type: 3}
   m_fireBall: {fileID: 1502969918981896, guid: dd8b7b33984359b49a25a7c46d305262, type: 3}
-  m_map: {fileID: 0}
   m_dialogDisplayer: {fileID: 0}
   m_playerStats: {fileID: 5467318607759618784}
   m_inventory: {fileID: 3392293947181712368}
@@ -238,6 +241,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5deb805912c6b14ab827357faf34761, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_sfxShoot: {fileID: 8300000, guid: c0a245a369a4b9146b8afb44bd2b5750, type: 3}
+  m_sfxNoAmmo: {fileID: 8300000, guid: bb200757d6a90ed4aa6f461184c3536d, type: 3}
   m_canFire: 1
 --- !u!114 &228451405993097729
 MonoBehaviour:
@@ -258,6 +263,9 @@ MonoBehaviour:
   m_maxAlterEgoTime: 15
   m_returnDamage: 10
   m_cooldown: 5
+  m_sfxEnterAlterEgo: {fileID: 8300000, guid: 116a3fbf32ebe2d4597a7a527806806b, type: 3}
+  m_sfxExitAlterEgo: {fileID: 8300000, guid: 116a3fbf32ebe2d4597a7a527806806b, type: 3}
+  m_sfxDash: {fileID: 8300000, guid: 07831b9d56861de45be3b512de1dd0c8, type: 3}
   m_teleportTarget: {fileID: 5201988557303675479}
   m_teleportDistance: 30
   m_dashCooldown: 1

@@ -43,6 +43,12 @@ public class BossBehavior : MonoBehaviour
     [Tooltip("SpawnZone qui délimite la zone du boss — il ne sortira pas de cette zone")]
     public SpawnZone m_bossZone;
 
+    [Header("SFX")]
+    [SerializeField] AudioClip m_sfxMeleeAttack;
+    [SerializeField] AudioClip m_sfxShoot;
+    [SerializeField] AudioClip m_sfxPhaseTransition;
+    [SerializeField] AudioClip m_sfxDeath;
+
     // ── Références ────────────────────────────────────────────────────────────
     private enum Phase { Phase1, Transitioning, Phase2 }
     private Phase        m_phase = Phase.Phase1;
@@ -134,6 +140,7 @@ public class BossBehavior : MonoBehaviour
     private void MeleeAttack()
     {
         m_lastMeleeTime = Time.time;
+        AudioManager.instance?.PlaySound(m_sfxMeleeAttack);
         PlayerStats stats = m_player.GetComponent<PlayerStats>();
         if (stats != null) stats.TakeDamage(m_meleeDamage);
     }
@@ -143,6 +150,7 @@ public class BossBehavior : MonoBehaviour
     private void StartTransition()
     {
         Debug.Log("[BossBehavior] Transition vers Phase 2 démarrée !");
+        AudioManager.instance?.PlaySound(m_sfxPhaseTransition);
         m_phase          = Phase.Transitioning;
         m_isInvincible   = true;
         m_transitionTimer = 0f;
@@ -222,6 +230,7 @@ public class BossBehavior : MonoBehaviour
     private void ShootBurst(Vector2 dir)
     {
         m_lastShootTime = Time.time;
+        AudioManager.instance?.PlaySound(m_sfxShoot);
         if (m_projectilePrefab == null)
         {
             Debug.LogWarning("[BossBehavior] m_projectilePrefab non assigné — aucun projectile tiré !", this);
@@ -259,9 +268,13 @@ public class BossBehavior : MonoBehaviour
         }
         else if (m_phase == Phase.Phase2)
         {
+            AudioManager.instance?.PlaySound(m_sfxDeath);
+
+            if (m_bossZone != null)
+                m_bossZone.GetComponent<BossMusicTrigger>()?.OnBossDefeated();
+
             Destroy(gameObject);
-            if (GameManager.Instance != null)
-                GameManager.Instance.TriggerEndGame();
+            GameManager.Instance?.TriggerEndGame();
         }
     }
 

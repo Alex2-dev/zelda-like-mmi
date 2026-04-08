@@ -75,6 +75,7 @@ public class TransitionManager : MonoBehaviour
 
     private IEnumerator Fade(float from, float to, float duration)
     {
+        m_fadeGroup.alpha = from;
         float t = 0f;
         while (t < duration)
         {
@@ -142,6 +143,8 @@ public class TransitionManager : MonoBehaviour
         var bg = new GameObject("Background");
         bg.transform.SetParent(canvasGO.transform, false);
         m_fadeGroup = bg.AddComponent<CanvasGroup>();
+        m_fadeGroup.alpha = 0f;
+        m_fadeGroup.blocksRaycasts = false;
         var bgImg  = bg.AddComponent<Image>();
         bgImg.color = Color.black;
         var bgRect = bg.GetComponent<RectTransform>();
@@ -153,7 +156,7 @@ public class TransitionManager : MonoBehaviour
         var pc = new GameObject("PCScreen");
         pc.transform.SetParent(bg.transform, false);
         m_pcScreen = pc.AddComponent<RectTransform>();
-        m_pcScreen.sizeDelta       = new Vector2(200, 150);
+        m_pcScreen.sizeDelta       = new Vector2(500, 350);
         m_pcScreen.anchoredPosition = Vector2.zero;
         var pcImg  = pc.AddComponent<Image>();
         pcImg.color = new Color(0.1f, 0.8f, 0.1f, 0.8f);
@@ -164,7 +167,7 @@ public class TransitionManager : MonoBehaviour
         m_label           = textObj.AddComponent<TextMeshProUGUI>();
         m_label.text      = "";
         m_label.fontSize  = 24;
-        m_label.color     = new Color(0.1f, 1f, 0.1f);
+        m_label.color     = Color.white;
         m_label.alignment = TextAlignmentOptions.Center;
         var labelRect = m_label.GetComponent<RectTransform>();
         labelRect.anchorMin = new Vector2(0.1f, 0.4f);

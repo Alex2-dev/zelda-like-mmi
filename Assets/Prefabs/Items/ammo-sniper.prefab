@@ -99,6 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_itemData: {fileID: 11400000, guid: 399b5a5ad669096459044c01d27f938b, type: 2}
+  m_sfxPickup: {fileID: 8300000, guid: 6f11cf3539b5d9b42933be4994d91a01, type: 3}
 --- !u!61 &4393401076193791817
 BoxCollider2D:
   m_ObjectHideFlags: 0

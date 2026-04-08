@@ -33,6 +33,9 @@ public class EnemyBehavior : MonoBehaviour
     public float m_damage         = 10f;
     public float m_damageCooldown = 1f;
 
+    [Header("SFX")]
+    [SerializeField] AudioClip m_sfxAttack;
+
     // Zone assignée par l'EnemySpawner (optionnel)
     [HideInInspector] public SpawnZone m_homeZone;
 
@@ -259,6 +262,7 @@ public class EnemyBehavior : MonoBehaviour
         {
             stats.TakeDamage(m_damage);
             m_lastDamageTime = Time.time;
+            AudioManager.instance?.PlaySound(m_sfxAttack);
         }
     }
 }

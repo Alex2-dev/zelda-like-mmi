@@ -28,6 +28,11 @@ public class MainMenuUI : MonoBehaviour
         m_settingsPanel.SetActive(true);
     }
 
+    public void OnCreditsClicked()
+    {
+        CreditsUI.Instance?.Show();
+    }
+
     public void OnQuitClicked()
     {
         Application.Quit();

@@ -13,6 +13,9 @@ public class PickableItem : MonoBehaviour
     [Tooltip("L'objet qui sera ajouté à l'inventaire du joueur")]
     public ItemData m_itemData;
 
+    [Header("SFX")]
+    [SerializeField] AudioClip m_sfxPickup;
+
     /// <summary>Appelée par PlayerPickup quand le joueur entre dans la zone de ramassage.</summary>
     public void TryPickup(Inventory inventory)
     {
@@ -20,6 +23,7 @@ public class PickableItem : MonoBehaviour
 
         if (inventory.AddItem(m_itemData))
         {
+            AudioManager.instance?.PlaySound(m_sfxPickup);
             GetComponent<Collider2D>().enabled = false;
 
             SpriteRenderer sr = GetComponent<SpriteRenderer>();

@@ -35,6 +35,7 @@ public class AudioManager : MonoBehaviour
 
     public void PlayMusic(AudioClip clip, bool loop, float volume = 1.0f, float pitch = 1.0f)
     {
+        if (clip == null) return;
         m_musicStream.pitch  = pitch;
         m_musicStream.volume = volume * GetMusicVolume();
         m_musicStream.loop   = loop;
@@ -67,5 +68,6 @@ public class AudioManager : MonoBehaviour
     {
         if (m_musicStream != null) m_musicStream.volume = GetMusicVolume();
         if (m_soundStream != null) m_soundStream.volume = GetSoundVolume();
+        Debug.Log($"[AudioManager] Music volume: {GetMusicVolume()} | Sound volume: {GetSoundVolume()}");
     }
 }

@@ -14,6 +14,10 @@ public class EnemyHealth : MonoBehaviour
 
     [SerializeField] private float m_currentHealth;
 
+    [Header("SFX")]
+    [SerializeField] AudioClip m_sfxHurt;
+    [SerializeField] AudioClip m_sfxDeath;
+
     [Header("Drops")]
     [Tooltip("Prefabs pouvant être droppés à la mort")]
     public GameObject[] m_dropPrefabs;
@@ -42,6 +46,7 @@ public class EnemyHealth : MonoBehaviour
         m_currentHealth = Mathf.Max(m_currentHealth - amount, 0f);
         if (m_currentHealth <= 0f)
         {
+            AudioManager.instance?.PlaySound(m_sfxDeath);
             OnDeath?.Invoke();
             // Si pas de boss (ou boss phase 2), détruit
             if (boss == null)
@@ -49,6 +54,10 @@ public class EnemyHealth : MonoBehaviour
                 SpawnDrops();
                 Destroy(gameObject);
             }
+        }
+        else
+        {
+            AudioManager.instance?.PlaySound(m_sfxHurt);
         }
     }
 

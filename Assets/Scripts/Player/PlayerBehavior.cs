@@ -15,6 +15,15 @@ public enum HideType { NONE, CLOSET, WATER, BUSH }
 
 public class PlayerBehavior : MonoBehaviour
 {
+    [Header("SFX")]
+    [SerializeField] AudioClip m_sfxFootstep;
+    [SerializeField] float m_footstepInterval = 0.35f;
+    [SerializeField] AudioClip m_sfxBreath;
+    [SerializeField] float m_breathInterval = 4f;
+
+    private float m_footstepTimer = 0f;
+    private float m_breathTimer   = 0f;
+
     [Header("Interaction")]
     public Collider2D m_hideInteractionCollider;   // le collider du joueur qui sert pour les cachettes
 
@@ -188,6 +197,7 @@ public class PlayerBehavior : MonoBehaviour
         }
 
         ChangeSpriteToMatchDirection();
+        UpdateAmbientSFX();
 
         // If the player presses SPACE, then two solution
         // - If there is a dialog ready to be displayed (i.e. the player is closed to a NPC)
@@ -371,6 +381,30 @@ private void OnTriggerExit2D(Collider2D collision)
         Color c = m_renderer.color;
         c.a = 0.3f;   // 30% opaque
         m_renderer.color = c;
+    }
+
+    private void UpdateAmbientSFX()
+    {
+        if (m_isMoving)
+        {
+            m_footstepTimer -= Time.deltaTime;
+            if (m_footstepTimer <= 0f)
+            {
+                AudioManager.instance?.PlaySound(m_sfxFootstep);
+                m_footstepTimer = m_footstepInterval;
+            }
+        }
+        else
+        {
+            m_footstepTimer = 0f;
+        }
+
+        m_breathTimer -= Time.deltaTime;
+        if (m_breathTimer <= 0f)
+        {
+            AudioManager.instance?.PlaySound(m_sfxBreath);
+            m_breathTimer = m_breathInterval;
+        }
     }
 
     private void UnhidePlayer()

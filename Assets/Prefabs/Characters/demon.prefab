@@ -132,6 +132,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_maxHealth: 100
   m_currentHealth: 0
+  m_sfxHurt: {fileID: 8300000, guid: 651221f6900a8c548887b31b1c63a56a, type: 3}
+  m_sfxDeath: {fileID: 8300000, guid: 1aee28eacadc311498619648ae390309, type: 3}
   m_dropPrefabs:
   - {fileID: 5488917583686616538, guid: d566d0e3aeea73a48b2d3d48559213fa, type: 3}
   - {fileID: 1680317245589121322, guid: bd8454a7db49d0c4f9033a716a52280c, type: 3}
@@ -168,6 +170,7 @@ MonoBehaviour:
   m_patrolWaitMax: 3
   m_damage: 10
   m_damageCooldown: 1
+  m_sfxAttack: {fileID: 0}
   m_homeZone: {fileID: 0}
   m_patrolRadius: 8
 --- !u!114 &1087443131992026344
