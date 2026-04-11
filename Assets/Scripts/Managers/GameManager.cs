@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     }
 
     public bool BossDefeated { get; private set; } = false;
+    public int  CurrentSlot  { get; private set; } = 0;
 
     private const string MAIN_SCENE = "MainScene";
     private const string MENU_SCENE = "MenuScene";
@@ -32,8 +33,9 @@ public class GameManager : MonoBehaviour
         if (Instance == this) Instance = null;
     }
 
-    public void StartGame()
+    public void StartGame(int slot = 0)
     {
+        CurrentSlot = slot;
         if (TransitionManager.Instance != null)
             TransitionManager.Instance.PlayEnterPC(() => SceneManager.LoadScene(MAIN_SCENE));
         else

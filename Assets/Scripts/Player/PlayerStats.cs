@@ -30,7 +30,10 @@ public class PlayerStats : MonoBehaviour
 
     public void TakeDamage(float amount)
     {
+        if (m_currentHealth <= 0f) return;
         m_currentHealth = Mathf.Max(m_currentHealth - amount, 0f);
+        if (m_currentHealth <= 0f)
+            DeathScreenUI.Instance?.Show();
     }
 
     public void Heal(float amount)
