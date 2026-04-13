@@ -24,14 +24,18 @@ public class DialogManager : MonoBehaviour {
     public Text m_renderText;
     private List<DialogPage> m_dialogToDisplay;
 
+    /// <summary>Le composant Dialog du PNJ dont le dialogue est actuellement affiché.</summary>
+    public Dialog ActiveDialog { get; private set; }
+
     void Awake () {
 
     }
 
     // Sets the dialog to be displayed
-    public void SetDialog(List<DialogPage> dialogToAdd)
+    public void SetDialog(List<DialogPage> dialogToAdd, Dialog source = null)
     {
         m_dialogToDisplay = new List<DialogPage>(dialogToAdd);
+        ActiveDialog = source;
 
         if (m_dialogToDisplay.Count > 0)
         {
@@ -60,8 +64,11 @@ public class DialogManager : MonoBehaviour {
             this.gameObject.SetActive(false);
         }
 
-        // Removes the page when the player presses "space"
-        if (Input.GetKeyDown(KeyCode.Space))
+        // Removes the page when the player presses "space" (or gamepad South via InputManager)
+        bool nextPage = InputManager.Instance != null
+            ? InputManager.Instance.AttackPressed
+            : Input.GetKeyDown(KeyCode.Space);
+        if (nextPage)
         {
             m_dialogToDisplay.RemoveAt(0);
         }

@@ -38,7 +38,12 @@ public class SaveSlotUI : MonoBehaviour
         RefreshSlots();
     }
 
-    void OnEnable() => RefreshSlots();
+    void OnEnable()
+    {
+        RefreshSlots();
+        // Sélectionne le premier slot disponible pour la navigation manette
+        UINavigationSetup.SelectFirst(m_slotButtons);
+    }
 
     private void RefreshSlots()
     {

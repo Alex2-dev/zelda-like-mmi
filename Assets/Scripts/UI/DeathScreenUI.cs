@@ -74,5 +74,8 @@ public class DeathScreenUI : MonoBehaviour
         m_canvasGroup.alpha          = 1f;
         m_canvasGroup.interactable   = true;
         m_canvasGroup.blocksRaycasts = true;
+
+        // Sélectionne "Réessayer" par défaut pour la navigation manette
+        UINavigationSetup.SelectFirst(new[] { m_retryButton, m_menuButton });
     }
 }

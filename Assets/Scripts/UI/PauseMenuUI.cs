@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Gère le menu pause (Échap) dans MainScene.
+/// Gère le menu pause (Échap / Start manette) dans MainScene.
 /// </summary>
 public class PauseMenuUI : MonoBehaviour
 {
@@ -15,8 +15,13 @@ public class PauseMenuUI : MonoBehaviour
     void Update()
     {
         if (InputManager.Instance == null) return;
+
         if (InputManager.Instance.PausePressed)
             TogglePause();
+
+        // B manette = retour au menu pause depuis les settings
+        if (m_isPaused && m_settingsPanel.activeSelf && InputManager.Instance.UIBackPressed)
+            BackFromSettings();
     }
 
     public void TogglePause()
@@ -31,6 +36,7 @@ public class PauseMenuUI : MonoBehaviour
         Time.timeScale = 0f;
         m_pausePanel.SetActive(true);
         m_settingsPanel.SetActive(false);
+        UINavigationSetup.SelectFirstInPanel(m_pausePanel);
     }
 
     public void Resume()
@@ -39,18 +45,26 @@ public class PauseMenuUI : MonoBehaviour
         Time.timeScale = 1f;
         m_pausePanel.SetActive(false);
         m_settingsPanel.SetActive(false);
+        UINavigationSetup.Deselect();
     }
 
     public void OpenSettings()
     {
         m_pausePanel.SetActive(false);
         m_settingsPanel.SetActive(true);
+        UINavigationSetup.SelectFirstInPanel(m_settingsPanel);
     }
 
     public void BackFromSettings()
     {
         m_settingsPanel.SetActive(false);
         m_pausePanel.SetActive(true);
+        UINavigationSetup.SelectFirstInPanel(m_pausePanel);
+    }
+
+    public void Save()
+    {
+        PlayerSaveLoader.Instance?.SaveCurrentState();
     }
 
     public void QuitToMenu()

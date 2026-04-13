@@ -187,7 +187,7 @@ public class PlayerBehavior : MonoBehaviour
 
         // Quit/Pause handled by GameManager via InputManager.PausePressed
 
-        bool isBlocked = m_dialogDisplayer.IsOnScreen() || InventoryUI.IsOpen || MessageUI.IsOpen;
+        bool isBlocked = m_dialogDisplayer.IsOnScreen() || InventoryUI.IsOpen || MessageUI.IsOpen || Time.timeScale == 0f;
         if (m_weaponManager != null)
             m_weaponManager.m_canFire = !isBlocked;
 
@@ -208,7 +208,7 @@ public class PlayerBehavior : MonoBehaviour
         {
             if (m_closestNPCDialog != null)
             {
-                m_dialogDisplayer.SetDialog(m_closestNPCDialog.GetDialog());
+                m_dialogDisplayer.SetDialog(m_closestNPCDialog.GetDialog(), m_closestNPCDialog);
             }
             else if (m_weaponManager != null && m_weaponManager.HasWeapon() && !m_weaponManager.IsAutomatic())
             {

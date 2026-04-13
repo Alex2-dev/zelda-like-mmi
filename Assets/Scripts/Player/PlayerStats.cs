@@ -64,4 +64,11 @@ public class PlayerStats : MonoBehaviour
     {
         return m_currentHealth / m_maxHealth;
     }
+
+    /// <summary>Restaure la santé depuis une sauvegarde.</summary>
+    public void RestoreHealth(float current, float max)
+    {
+        if (max > 0f) m_maxHealth = max;
+        m_currentHealth = Mathf.Clamp(current, 0f, m_maxHealth);
+    }
 }

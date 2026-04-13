@@ -16,16 +16,28 @@ public class MainMenuUI : MonoBehaviour
         ShowMain();
     }
 
+    void Update()
+    {
+        if (InputManager.Instance == null) return;
+        if (!InputManager.Instance.UIBackPressed) return;
+
+        // B manette = retour au menu principal depuis les sous-panels
+        if (m_slotPanel.activeSelf || m_settingsPanel.activeSelf)
+            ShowMain();
+    }
+
     public void OnPlayClicked()
     {
         m_mainPanel.SetActive(false);
         m_slotPanel.SetActive(true);
+        UINavigationSetup.SelectFirstInPanel(m_slotPanel);
     }
 
     public void OnSettingsClicked()
     {
         m_mainPanel.SetActive(false);
         m_settingsPanel.SetActive(true);
+        UINavigationSetup.SelectFirstInPanel(m_settingsPanel);
     }
 
     public void OnCreditsClicked()
@@ -46,5 +58,6 @@ public class MainMenuUI : MonoBehaviour
         m_mainPanel.SetActive(true);
         m_slotPanel.SetActive(false);
         m_settingsPanel.SetActive(false);
+        UINavigationSetup.SelectFirstInPanel(m_mainPanel);
     }
 }

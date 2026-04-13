@@ -23,6 +23,7 @@ public class InputManager : MonoBehaviour
     private InputAction m_scrollAction;
     private InputAction m_pauseAction;
     private InputAction m_placeMessageAction;
+    private InputAction m_uiBackAction;
 
     // Clé PlayerPrefs pour les overrides
     private const string BINDINGS_KEY = "InputBindings";
@@ -60,6 +61,8 @@ public class InputManager : MonoBehaviour
     public float   ScrollInput      => m_scrollAction.ReadValue<float>();
     public bool    PausePressed        => m_pauseAction.WasPressedThisFrame();
     public bool    PlaceMessagePressed => m_placeMessageAction.WasPressedThisFrame();
+    /// <summary>Bouton "retour/annuler" dans les menus (B sur Xbox, Rond sur PS).</summary>
+    public bool    UIBackPressed       => m_uiBackAction.WasPressedThisFrame();
 
     // ── Rebinding ───────────────────────────────────────────────────────────
 
@@ -183,6 +186,10 @@ public class InputManager : MonoBehaviour
         m_placeMessageAction = new InputAction("PlaceMessage", InputActionType.Button);
         m_placeMessageAction.AddBinding("<Keyboard>/n");
         m_placeMessageAction.AddBinding("<Gamepad>/rightShoulder");
+
+        // Retour/Annuler dans les menus — B (Xbox) / Rond (PS)
+        m_uiBackAction = new InputAction("UIBack", InputActionType.Button);
+        m_uiBackAction.AddBinding("<Gamepad>/buttonEast");
     }
 
     private void EnableActions()
@@ -199,6 +206,7 @@ public class InputManager : MonoBehaviour
         m_scrollAction.Enable();
         m_pauseAction.Enable();
         m_placeMessageAction.Enable();
+        m_uiBackAction.Enable();
     }
 
     private void DisableActions()
@@ -215,6 +223,7 @@ public class InputManager : MonoBehaviour
         m_scrollAction?.Disable();
         m_pauseAction?.Disable();
         m_placeMessageAction?.Disable();
+        m_uiBackAction?.Disable();
     }
 
     public void SaveBindings()

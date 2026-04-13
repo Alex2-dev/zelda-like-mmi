@@ -52,6 +52,8 @@ public class MessageUI : MonoBehaviour
 
         m_inputField.Select();
         m_inputField.ActivateInputField();
+        // Sur manette : sélectionne Envoyer (le joueur peut aussi naviguer vers Annuler)
+        UINavigationSetup.SelectFirst(new[] { m_sendButton, m_cancelButton });
     }
 
     private void OnSend()
@@ -72,6 +74,8 @@ public class MessageUI : MonoBehaviour
         m_composePanel.SetActive(false);
         IsOpen = true;
         Time.timeScale = 0f;
+        // Sélectionne le bouton Fermer pour la navigation manette
+        UINavigationSetup.SelectFirst(new[] { m_closeReadButton });
     }
 
     // ── Fermeture ─────────────────────────────────────────────────────────────
@@ -82,5 +86,6 @@ public class MessageUI : MonoBehaviour
         m_readPanel.SetActive(false);
         IsOpen = false;
         Time.timeScale = 1f;
+        UINavigationSetup.Deselect();
     }
 }

@@ -133,35 +133,66 @@ public class InventoryUI : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        bool inventoryPressed = InputManager.Instance != null
+            ? InputManager.Instance.InventoryPressed
+            : Input.GetKeyDown(KeyCode.E);
+
+        if (inventoryPressed)
         {
             m_inventoryOpen = !m_inventoryOpen;
             IsOpen = m_inventoryOpen;
             if (m_inventoryPanel != null)
                 m_inventoryPanel.SetActive(m_inventoryOpen);
 
-            if (!m_inventoryOpen)
+            if (m_inventoryOpen)
+            {
+                // Sélectionne le premier slot pour la navigation manette
+                UINavigationSetup.SelectFirstInPanel(m_inventoryPanel);
+            }
+            else
             {
                 m_selectedSlot = -1;
+                UINavigationSetup.Deselect();
                 RefreshUI();
             }
         }
 
-        // Échap annule la sélection
-        if (Input.GetKeyDown(KeyCode.Escape) && m_selectedSlot != -1)
+        // Annuler la sélection de slot (Échap clavier ou B manette)
+        bool cancelPressed = InputManager.Instance != null
+            ? InputManager.Instance.UIBackPressed
+            : Input.GetKeyDown(KeyCode.Escape);
+
+        if (cancelPressed)
         {
-            m_selectedSlot = -1;
-            RefreshUI();
+            if (m_selectedSlot != -1)
+            {
+                m_selectedSlot = -1;
+                RefreshUI();
+            }
+            else if (m_inventoryOpen)
+            {
+                // B referme aussi l'inventaire si rien n'est sélectionné
+                m_inventoryOpen = false;
+                IsOpen = false;
+                if (m_inventoryPanel != null)
+                    m_inventoryPanel.SetActive(false);
+                UINavigationSetup.Deselect();
+                RefreshUI();
+            }
         }
 
         // Si un slot est sélectionné : 1 ou 2 l'assigne à la hotbar correspondante
         if (m_selectedSlot != -1)
         {
-            // Supporte clavier AZERTY (&/é) et QWERTY (1/2)
-            if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Ampersand))
-                AssignToHotbar(0);
-            if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.At))
-                AssignToHotbar(1);
+            bool h1 = InputManager.Instance != null
+                ? InputManager.Instance.Hotbar1Pressed
+                : (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Ampersand));
+            bool h2 = InputManager.Instance != null
+                ? InputManager.Instance.Hotbar2Pressed
+                : (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.At));
+
+            if (h1) AssignToHotbar(0);
+            if (h2) AssignToHotbar(1);
         }
     }
 
